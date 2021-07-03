@@ -62,5 +62,21 @@ public class RoomService {
 	public List<RoomDto> queryAll(){
 		return roomRepository.queryAll();
 	}
+	
+//	public List<RoomDto> getRoomList(){
+//		List<RoomDto> redisList = roomRedisDao.getRoomList();
+//		if(redisList!=null && !redisList.isEmpty()) {
+//			logger.info("-----> redis exsit");
+//			return redisList;
+//		}else {
+//			List<RoomDto> list = roomDao.queryAll();
+//			if(list!=null && !list.isEmpty()) {
+//				for (RoomDto roomDto : list) {
+//					roomRedisDao.createRoom(roomDto);
+//				}
+//			}
+//			return list;
+//		}
+//	}
 
 }
