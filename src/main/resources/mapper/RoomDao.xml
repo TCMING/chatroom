@@ -5,8 +5,22 @@
     <!-- 目的:为DAO接口方法提供sql语句设置-->
 
     <select id="queryAll" resultType="com.uestc.controllerteam.chartservice.dto.RoomDto">
+        SELECT * FROM room;
+    </select>
+
+    <select id="insert" parameterType="java.lang.String">
+        insert into room (`name`) values (#{name,jdbcType=VARCHAR}})
+    </select>
+
+    <select id="queryRoomRecord" parameterType="com.uestc.controllerteam.chartservice.model.RoomControlData"
+            resultMap="com.uestc.controllerteam.chartservice.dto.RoomDto">
         SELECT
             *
-        FROM room;
+        FROM
+            room
+        WHERE 1=1
+            ORDER BY room.id desc
+        LIMIT #{pageIndex},#{pageSize};
     </select>
+
 </mapper>
