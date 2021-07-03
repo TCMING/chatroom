@@ -2,7 +2,7 @@ package com.uestc.controllerteam.chartservice.repository;
 
 import com.uestc.controllerteam.chartservice.dao.RoomDao;
 import com.uestc.controllerteam.chartservice.dto.RoomDto;
-import com.uestc.controllerteam.chartservice.model.RoomControlData;
+import com.uestc.controllerteam.chartservice.model.QueryControlData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,12 +23,16 @@ public class RoomRepository {
         return roomDao.insert(name) == 1;
     }
 
-    public List<RoomDto> queryRoomRecord(RoomControlData controlData){
+    public List<RoomDto> queryRoomRecord(QueryControlData controlData){
         return roomDao.queryRoomRecord(controlData);
     }
 
     public List<RoomDto> queryAll(){
         return roomDao.queryAll();
+    }
+
+    public RoomDto queryRoomById(int roomId){
+        return roomDao.queryRoomById(roomId);
     }
 
 }

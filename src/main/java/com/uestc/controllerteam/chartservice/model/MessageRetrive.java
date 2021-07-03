@@ -1,5 +1,6 @@
 package com.uestc.controllerteam.chartservice.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**
@@ -8,12 +9,13 @@ import lombok.Data;
  * @Version 1.0
  */
 @Data
+@AllArgsConstructor
 public class MessageRetrive {
 
     private String id;
 
     private String text;
 
-    private String timestamp;
+    private long timestamp;
 
 }

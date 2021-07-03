@@ -8,7 +8,7 @@ import lombok.Data;
  * @Version 1.0
  */
 @Data
-public class RoomControlData {
+public class QueryControlData {
 
     private int pageIndex;
 

@@ -12,6 +12,8 @@ public class User {
 
     private String username;
 
+    private int roomId;
+
     private String firstName;
 
     private String lastName;

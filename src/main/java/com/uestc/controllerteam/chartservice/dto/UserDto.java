@@ -1,14 +1,24 @@
 package com.uestc.controllerteam.chartservice.dto;
 
-import java.io.Serializable;
+import lombok.Data;
 
-public class UserDto implements Serializable{
+@Data
+public class UserDto{
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
-	
+	private int id;
+
+	private String username;
+
+	private int roomId;
+
+	private String firstName;
+
+	private String lastName;
+
+	private String email;
+
+	private String password;
+
+	private String phone;
 
 }
