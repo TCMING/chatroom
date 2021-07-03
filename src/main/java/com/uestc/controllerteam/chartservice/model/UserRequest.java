@@ -8,11 +8,9 @@ import lombok.Data;
  * @Version 1.0
  */
 @Data
-public class User {
+public class UserRequest {
 
     private String username;
-
-    private int roomId;
 
     private String firstName;
 

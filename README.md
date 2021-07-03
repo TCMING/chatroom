@@ -6,12 +6,12 @@ create DATABASE  chatService;
 use chatService;
 
 drop table room;
-drop TABLE user;
+drop TABLE userRequest;
 drop TABLE message;
 
 
 select * from room;
-select * from user;
+select * from userRequest;
 select * from message;
 
 
@@ -27,7 +27,7 @@ create table room(
 
 
 
-create table user(
+create table userRequest(
     id int NOT NULL AUTO_INCREMENT,
     username VARCHAR(200) NOT NULL,
     firstName VARCHAR(200) NOT NULL,

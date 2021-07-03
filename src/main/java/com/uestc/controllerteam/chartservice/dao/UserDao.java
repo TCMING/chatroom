@@ -13,6 +13,8 @@ public interface UserDao {
 
 	UserDto queryUser(String userName);
 
-	boolean updateUser(UserDto userDto);
+	int saveUser(UserDto userDto);
+
+	int updateUser(UserDto userDto);
 
 }

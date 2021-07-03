@@ -2,7 +2,6 @@ package com.uestc.controllerteam.chartservice.repository;
 
 import com.uestc.controllerteam.chartservice.dao.UserDao;
 import com.uestc.controllerteam.chartservice.dto.UserDto;
-import com.uestc.controllerteam.chartservice.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,11 +17,20 @@ public class UserRepository {
     private UserDao userDao;
 
 
-    public boolean updateUser(User user){
-        UserDto userDto = new UserDto();
-        userDto = new UserDto();
-        return userDao.updateUser(userDto);
+    public UserDto queryUser(String userName){
+
+        return userDao.queryUser(userName);
     }
+
+    public boolean saveUser(UserDto userDto){
+        return userDao.saveUser(userDto) <= 1;
+    }
+
+    public boolean updateUser(UserDto user){
+        return userDao.updateUser(user) <= 1;
+    }
+
+
 
 
 }

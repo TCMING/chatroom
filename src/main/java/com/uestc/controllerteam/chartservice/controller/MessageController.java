@@ -2,7 +2,7 @@ package com.uestc.controllerteam.chartservice.controller;
 
 import com.uestc.controllerteam.chartservice.model.MessageRetrive;
 import com.uestc.controllerteam.chartservice.model.QueryControlData;
-import com.uestc.controllerteam.chartservice.model.User;
+import com.uestc.controllerteam.chartservice.model.UserRequest;
 import com.uestc.controllerteam.chartservice.service.MessageService;
 import com.uestc.controllerteam.chartservice.utils.GsonUtils;
 import org.slf4j.Logger;
@@ -26,15 +26,15 @@ public class MessageController  extends AbstractController {
 	@RequestMapping(value="/message/send")
 	public boolean receive(@RequestBody MessageRetrive message) {
 		//获取人信息
-		User user = new User();
-		return messageService.recvMessage(user,message.getId(),message.getText());
+		UserRequest userRequest = new UserRequest();
+		return messageService.recvMessage(userRequest,message.getId(),message.getText());
 	}
 
 	@RequestMapping(value="/message/retrieve")
 	public String pullMessage(@RequestBody QueryControlData queryControlData){
 		//获取人信息
-		User user = new User();
-		List<MessageRetrive> messageRetrives = messageService.pullMessage(user,queryControlData);
+		UserRequest          userRequest     = new UserRequest();
+		List<MessageRetrive> messageRetrives = messageService.pullMessage(userRequest,queryControlData);
 		return GsonUtils.toJsonString(messageRetrives);
 	}
 

@@ -6,22 +6,23 @@ import java.util.List;
 import java.util.Map;
 
 import com.uestc.controllerteam.chartservice.dto.RoomDto;
-import com.uestc.controllerteam.chartservice.model.User;
+import com.uestc.controllerteam.chartservice.dto.UserDto;
 import com.uestc.controllerteam.chartservice.repository.RoomRepository;
 import com.uestc.controllerteam.chartservice.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+@Service
 public class RoomService {
-
-
 
 	@Autowired
 	private RoomRepository roomRepository;
 
 	@Autowired
 	private UserRepository userRepository;
+
 
 	private Map<Integer,List<String>> roomInfo;
 
@@ -48,7 +49,7 @@ public class RoomService {
 		return true;
 	}
 
-	public boolean roomLeave(User user){
+	public boolean roomLeave(UserDto user){
 		//1.获取用户所在房间信息
 		//可用redis缓存，或者直接存到数据库中的字段上面，假设存在数据库字段中
 		if(user.getRoomId() <= 0){
