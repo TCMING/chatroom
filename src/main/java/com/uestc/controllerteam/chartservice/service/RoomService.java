@@ -59,7 +59,7 @@ public class RoomService {
 		return userRepository.updateUser(user);
 	}
 
-	List<RoomDto> queryAll(){
+	public List<RoomDto> queryAll(){
 		return roomRepository.queryAll();
 	}
 
