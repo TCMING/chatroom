@@ -1,9 +1,7 @@
 package com.uestc.controllerteam.chartservice.service;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.uestc.controllerteam.chartservice.dto.RoomDto;
 import com.uestc.controllerteam.chartservice.dto.UserDto;
@@ -23,12 +21,11 @@ public class RoomService {
 	@Autowired
 	private UserRepository userRepository;
 
+	//缓存
+	private ConcurrentHashMap<Integer, Set<String>> roomUserInfo;
 
-	private Map<Integer,List<String>> roomInfo;
-
-
-	public List<String> queryRoomUsers(int roomId){
-		return roomInfo.getOrDefault(roomId,new LinkedList<>());
+	public Set<String> queryRoomUsers(int roomId){
+		return roomUserInfo.getOrDefault(roomId,new HashSet<>());
 	}
 
 	public boolean enterRoom(int roomId,String username){
@@ -38,18 +35,22 @@ public class RoomService {
 			return false;
 		}
 		//2.登录房间
-		List<String> userList = roomInfo.get(roomId);
-		if(CollectionUtils.isEmpty(userList)){
-			userList = new ArrayList<>();
-			userList.add(username);
-			roomInfo.put(roomId,userList);
+		Set<String> userSet = roomUserInfo.get(roomId);
+		if(CollectionUtils.isEmpty(userSet)){
+			userSet = new HashSet<>();
+			userSet.add(username);
+			roomUserInfo.put(roomId,userSet);
 		}else{
-			userList.add(username);
+			if(!userSet.contains(username)){
+				userSet.add(username);
+				roomUserInfo.put(roomId,userSet);
+			}
 		}
 		return true;
 	}
 
 	public boolean roomLeave(UserDto user){
+		// TODO: 2021/7/4 题意不要求持久化在线人数   内存或者redis或者mysql  数据一致性  性能问题
 		//1.获取用户所在房间信息
 		//可用redis缓存，或者直接存到数据库中的字段上面，假设存在数据库字段中
 		if(user.getRoomId() <= 0){
@@ -57,26 +58,11 @@ public class RoomService {
 		}
 		user.setRoomId(0);
 		return userRepository.updateUser(user);
+
 	}
 
 	public List<RoomDto> queryAll(){
 		return roomRepository.queryAll();
 	}
 	
-//	public List<RoomDto> getRoomList(){
-//		List<RoomDto> redisList = roomRedisDao.getRoomList();
-//		if(redisList!=null && !redisList.isEmpty()) {
-//			logger.info("-----> redis exsit");
-//			return redisList;
-//		}else {
-//			List<RoomDto> list = roomDao.queryAll();
-//			if(list!=null && !list.isEmpty()) {
-//				for (RoomDto roomDto : list) {
-//					roomRedisDao.createRoom(roomDto);
-//				}
-//			}
-//			return list;
-//		}
-//	}
-
 }

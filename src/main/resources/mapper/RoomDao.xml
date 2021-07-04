@@ -23,4 +23,13 @@
         LIMIT #{pageIndex},#{pageSize};
     </select>
 
+    <select id="queryRoomById" parameterType="java.lang.Integer"
+            resultMap="com.uestc.controllerteam.chartservice.dto.RoomDto">
+        SELECT
+            *
+        FROM
+            room r
+        where r.id=#{roomId}
+    </select>
+
 </mapper>

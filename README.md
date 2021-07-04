@@ -59,3 +59,12 @@ COMMENT = '消息';
 insert into room (name) 
   value('one');
 
+
+待确认/优化：
+1.sql分页
+2.GsonUtil线程安全
+3.token
+4.roomService中缓存用户列表线程安全问题，原hash,暂改concurrentHash ; 内存or redis
+5.roomService.roomLeave 持久化了，题意不需要持久化
+6.接口幂等、并发安全
+7.内存、redis、mysql数据一致性
