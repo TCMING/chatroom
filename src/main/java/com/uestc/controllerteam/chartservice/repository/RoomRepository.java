@@ -1,6 +1,7 @@
 package com.uestc.controllerteam.chartservice.repository;
 
 import com.uestc.controllerteam.chartservice.dao.RoomDao;
+import com.uestc.controllerteam.chartservice.dao.RoomRedisDao;
 import com.uestc.controllerteam.chartservice.dto.RoomDto;
 import com.uestc.controllerteam.chartservice.model.QueryControlData;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,9 @@ public class RoomRepository {
 
     @Autowired
     private RoomDao roomDao;
+
+    @Autowired
+    private RoomRedisDao roomRedisDao;
 
     public boolean saveRoom(String name){
         return roomDao.insert(name) == 1;

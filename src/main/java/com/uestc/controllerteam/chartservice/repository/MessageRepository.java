@@ -2,9 +2,11 @@ package com.uestc.controllerteam.chartservice.repository;
 
 import com.uestc.controllerteam.chartservice.dao.MessageDao;
 import com.uestc.controllerteam.chartservice.dto.MessageDto;
+import com.uestc.controllerteam.chartservice.model.MessageRetrive;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -23,12 +25,16 @@ public class MessageRepository {
         return messageDao.saveMessage(messageDto) == 0;
     }
 
-    public MessageDto queryMessage(String messageId){
-        return messageDao.queryMessage(messageId);
+    public MessageDto queryMessage(String id){
+        return messageDao.queryMessage(id);
     }
 
-    public List<MessageDto> queryMessages(String userName,int roomId,int pageIndex,int pageSize){
-        return new LinkedList<>();
+    public List<MessageRetrive> queryMessages(int roomId, int pageIndex, int pageSize){
+        HashMap<String,Integer> params = new HashMap<>();
+        params.put("roomId" , roomId);
+        params.put("pageIndex" , pageIndex);
+        params.put("pageSize" , pageSize);
+        return messageDao.queryAllMessage(params);
     }
 
 

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.uestc.controllerteam.chartservice.dao.MessageDao">
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete from message
+        where id = #{id}
+    </delete>
+    <insert id="saveMessage" parameterType="com.uestc.controllerteam.chartservice.dto.MessageDto">
+        insert into message (id, text, timestamp,
+        roomId, username)
+        values (#{id}, #{text,jdbcType=VARCHAR}, #{timestamp,jdbcType=VARCHAR},
+        #{roomId,jdbcType=INTEGER}, #{username})
+    </insert>
+    <update id="updateByPrimaryKey" parameterType="com.uestc.controllerteam.chartservice.dto.MessageDto">
+        update message
+        set text = #{text,jdbcType=VARCHAR},
+        timestamp = #{timestamp,jdbcType=VARCHAR},
+        roomId = #{roomId,jdbcType=INTEGER},
+        username = #{username}
+        where id = #{id}
+    </update>
+    <select id="queryMessage" parameterType="java.lang.Long" resultType="com.uestc.controllerteam.chartservice.dto.MessageDto">
+        select id, text, timestamp, roomId, username
+        from message
+        where id = #{id}
+    </select>
+    <select id="queryAllMessage"  parameterType="java.util.HashMap" resultType="com.uestc.controllerteam.chartservice.model.MessageRetrive">
+        select id, text, timestamp
+        from message
+        where roomId = #{roomId}
+        order by id desc
+        LIMIT #{pageIndex},#{pageSize};
+    </select>
+</mapper>

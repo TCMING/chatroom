@@ -18,7 +18,6 @@ public class UserRepository {
 
 
     public UserDto queryUser(String userName){
-
         return userDao.queryUser(userName);
     }
 
@@ -26,8 +25,8 @@ public class UserRepository {
         return userDao.saveUser(userDto) <= 1;
     }
 
-    public boolean updateUser(UserDto user){
-        return userDao.updateUser(user) <= 1;
+    public boolean updateUser(int roomId , String username){
+        return userDao.updateUser(roomId , username) <= 1;
     }
 
 

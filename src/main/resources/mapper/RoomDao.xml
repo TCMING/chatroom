@@ -13,7 +13,7 @@
     </select>
 
     <select id="queryRoomRecord" parameterType="com.uestc.controllerteam.chartservice.model.QueryControlData"
-            resultMap="com.uestc.controllerteam.chartservice.dto.RoomDto">
+            resultType="com.uestc.controllerteam.chartservice.dto.RoomDto">
         SELECT
             *
         FROM
@@ -24,7 +24,7 @@
     </select>
 
     <select id="queryRoomById" parameterType="java.lang.Integer"
-            resultMap="com.uestc.controllerteam.chartservice.dto.RoomDto">
+            resultType="com.uestc.controllerteam.chartservice.dto.RoomDto">
         SELECT
             *
         FROM

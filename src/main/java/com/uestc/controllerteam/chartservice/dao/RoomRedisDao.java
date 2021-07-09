@@ -18,7 +18,7 @@ public class RoomRedisDao {
 	private String roomListKey = "roomList";
 	
 	public void createRoom(RoomDto room) {
-		redisTemplate.opsForList().rightPush(roomListKey, room);
+		redisTemplate.opsForList().leftPush(roomListKey, room);
 	}
 	
 	public List<RoomDto> getRoomList() {

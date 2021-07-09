@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.uestc.controllerteam.chartservice.dao.UserDao">
+    <!-- 目的:为DAO接口方法提供sql语句设置-->
+
+    <select id="queryUser" parameterType="java.lang.String"
+            resultType="com.uestc.controllerteam.chartservice.dto.UserDto">
+        SELECT
+            *
+        FROM
+            user u
+        where u.username=#{userName}
+    </select>
+
+    <insert id="saveUser" parameterType="com.uestc.controllerteam.chartservice.dto.UserDto">
+        insert into user (username,
+        firstName, lastName, email,
+        password, phone)
+        values (#{username,jdbcType=VARCHAR},
+        #{firstName,jdbcType=VARCHAR}, #{lastName,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR},
+        #{password,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR})
+    </insert>
+
+    <update id="updateUser" parameterType="com.uestc.controllerteam.chartservice.dto.UserDto">
+        update user
+        set roomId = #{roomId}
+        where username = #{username}
+    </update>
+
+</mapper>

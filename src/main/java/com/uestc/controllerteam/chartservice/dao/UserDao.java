@@ -15,6 +15,6 @@ public interface UserDao {
 
 	int saveUser(UserDto userDto);
 
-	int updateUser(UserDto userDto);
+	int updateUser(int roomId , String username);
 
 }

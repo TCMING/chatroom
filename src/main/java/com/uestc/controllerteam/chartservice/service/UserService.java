@@ -24,15 +24,12 @@ public class UserService {
         return userDto;
     }
 
-    public String userLogin(String username,String password){
+    public boolean userLogin(String username,String password){
         UserDto userDto = userRepository.queryUser(username);
-        String token = null;
         if(userDto != null && StringUtils.equals(password,userDto.getPassword())){
-            //生成token,或者使用拦截的方式
-            token = "";
+            return true;
         }
-        //
-        return token;
+        return false;
     }
 
     public boolean registryUser(UserRequest user){

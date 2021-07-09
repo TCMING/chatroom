@@ -22,43 +22,48 @@ public class RoomService {
 	private UserRepository userRepository;
 
 	//缓存
-	private ConcurrentHashMap<Integer, Set<String>> roomUserInfo;
+	private ConcurrentHashMap<Integer, Set<String>> roomUserCache;
 
 	public Set<String> queryRoomUsers(int roomId){
-		return roomUserInfo.getOrDefault(roomId,new HashSet<>());
+		return roomUserCache.getOrDefault(roomId,new HashSet<>());
 	}
 
-	public boolean enterRoom(int roomId,String username){
+	// TODO: 2021/7/5 并发同步？ 
+	public synchronized boolean enterRoom(int roomId,String username){
 		//1.判断房间存在
 		RoomDto roomDto = roomRepository.queryRoomById(roomId);
 		if(roomDto == null || StringUtils.isEmpty(roomDto.getName())){
 			return false;
 		}
 		//2.登录房间
-		Set<String> userSet = roomUserInfo.get(roomId);
-		if(CollectionUtils.isEmpty(userSet)){
-			userSet = new HashSet<>();
-			userSet.add(username);
-			roomUserInfo.put(roomId,userSet);
-		}else{
-			if(!userSet.contains(username)){
-				userSet.add(username);
-				roomUserInfo.put(roomId,userSet);
-			}
+		// TODO: 2021/7/5 先不考虑缓存
+//		Set<String> userSet = roomUserCache.get(roomId);
+//		if(CollectionUtils.isEmpty(userSet)){
+//			userSet = new HashSet<>();
+//			userSet.add(userName);
+//			roomUserCache.put(roomId,userSet);
+//		}else{
+//			if(!userSet.contains(userName)){
+//				userSet.add(userName);
+//			}
+//		}
+		UserDto user = userRepository.queryUser(username);
+		if(user.getRoomId()!=roomId){
+//			user.setRoomId(roomId);
+			userRepository.updateUser(roomId,username);
 		}
 		return true;
 	}
 
-	public boolean roomLeave(UserDto user){
+	public synchronized boolean roomLeave(String username){
 		// TODO: 2021/7/4 题意不要求持久化在线人数   内存或者redis或者mysql  数据一致性  性能问题
 		//1.获取用户所在房间信息
-		//可用redis缓存，或者直接存到数据库中的字段上面，假设存在数据库字段中
-		if(user.getRoomId() <= 0){
+		UserDto user = userRepository.queryUser(username);
+		if(user.getRoomId()<=0){
 			return true;
 		}
-		user.setRoomId(0);
-		return userRepository.updateUser(user);
-
+//		user.setRoomId(0);
+		return userRepository.updateUser(0,username);
 	}
 
 	public List<RoomDto> queryAll(){
