@@ -12,7 +12,7 @@ public interface RoomDao {
 
 	List<RoomDto> queryAll();
 
-	int insert(String name);
+	void insert(String name);
 
 	List<RoomDto> queryRoomRecord(QueryControlData controlData);
 

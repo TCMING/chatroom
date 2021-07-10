@@ -24,7 +24,7 @@ public class UserService {
         return userDto;
     }
 
-    public boolean userLogin(String username,String password){
+    public boolean userPasswordCheck(String username, String password){
         UserDto userDto = userRepository.queryUser(username);
         if(userDto != null && StringUtils.equals(password,userDto.getPassword())){
             return true;

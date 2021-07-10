@@ -23,8 +23,8 @@ public class RoomRepository {
     @Autowired
     private RoomRedisDao roomRedisDao;
 
-    public boolean saveRoom(String name){
-        return roomDao.insert(name) == 1;
+    public void saveRoom(String name){
+        roomDao.insert(name);
     }
 
     public List<RoomDto> queryRoomRecord(QueryControlData controlData){

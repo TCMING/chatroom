@@ -9,6 +9,7 @@ import com.uestc.controllerteam.chartservice.repository.UserRepository;
 import com.uestc.controllerteam.chartservice.service.RoomService;
 import com.uestc.controllerteam.chartservice.service.UserService;
 import com.uestc.controllerteam.chartservice.utils.BizCheckUtils;
+import com.uestc.controllerteam.chartservice.utils.ChatException;
 import com.uestc.controllerteam.chartservice.utils.GsonUtils;
 import com.uestc.controllerteam.chartservice.utils.PassToken;
 import org.slf4j.Logger;
@@ -41,11 +42,16 @@ public class RoomController extends AbstractController{
 
 	@RequestMapping(value="/room",method = {POST})
 	public void room(@RequestBody Room room) {
-		roomRepository.saveRoom(room.getName());
+		try {
+			roomRepository.saveRoom(room.getName());
+		} catch (Exception e) {
+			logger.error("error",e);
+			throw new ChatException("异常");
+		}
 	}
 
 	@RequestMapping(value="/room/{roomid}/enter",method = {PUT})
-	public void enterRoom(@PathVariable int roomid , @RequestParam(value="username")String username) {
+	public void enterRoom(@PathVariable String roomid , @RequestAttribute(value="username")String username) {
 		// TODO: 2021/7/4
 //		RoomDto roomDto = roomRepository.queryRoomById(roomid);
 //		BizCheckUtils.checkNull(roomDto,"房间不存在");
@@ -57,7 +63,7 @@ public class RoomController extends AbstractController{
 //			userRepository.updateUser(roomid,username);
 //		}
 
-		BizCheckUtils.check(roomService.enterRoom(roomid , username) , "房间不存在");
+		BizCheckUtils.check(roomService.enterRoom(Integer.valueOf(roomid) , username) , "房间不存在");
 
 	}
 

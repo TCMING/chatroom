@@ -16,9 +16,9 @@ public class JwtAuthenticationInterceptor implements HandlerInterceptor {
     UserRepository userRepository;
 
     @Override
-    public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object object) throws RuntimeException {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object object) throws RuntimeException {
         // 从请求头中取出 token  这里需要和前端约定好把jwt放到请求头一个叫token的地方
-        String token = httpServletRequest.getHeader("Authorization");
+        String token = request.getHeader("Authorization");
         // 如果不是映射到方法直接通过
         if (!(object instanceof HandlerMethod)) {
             return true;
@@ -55,7 +55,7 @@ public class JwtAuthenticationInterceptor implements HandlerInterceptor {
             //获取载荷内容
 //            String roomId = JwtUtils.getClaimByName(token, "roomId").asString();
             //放入attribute以便后面调用
-            httpServletRequest.setAttribute("username", username);
+            request.setAttribute("username", username);
             return true;
 
         }

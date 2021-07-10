@@ -9,7 +9,7 @@
     </select>
 
     <select id="insert" parameterType="java.lang.String">
-        insert into room (`name`) values (#{name,jdbcType=VARCHAR}})
+        insert into room (`name`) values (#{name,jdbcType=VARCHAR})
     </select>
 
     <select id="queryRoomRecord" parameterType="com.uestc.controllerteam.chartservice.model.QueryControlData"

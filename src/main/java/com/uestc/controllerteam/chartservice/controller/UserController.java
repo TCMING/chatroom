@@ -30,7 +30,7 @@ public class UserController  extends AbstractController{
 	@PassToken
 	@RequestMapping(value="/userLogin",method = {GET})
 	public String room(@RequestParam(value="username")String username, @RequestParam(value="password")String password) {
-		if(!userService.userLogin(username, password))
+		if(!userService.userPasswordCheck(username, password))
 			throw new ChatException("账号或密码错误");
 
 		String jwtToken = JwtUtils.createToken(username);
@@ -41,9 +41,15 @@ public class UserController  extends AbstractController{
 	@RequestMapping(value="/user/{username}",method = {GET})
 	public String room(@PathVariable String username) {
 		UserDto userDto = userService.queryUserByName(username);
-		UserResponse userResponse = new UserResponse(userDto.getFirstName(),userDto.getLastName(),
-				userDto.getEmail(),userDto.getPhone());
-		return GsonUtils.toJsonString(userResponse);
+		if(userDto!=null){
+			UserResponse userResponse = new UserResponse(userDto.getFirstName(),userDto.getLastName(),
+					userDto.getEmail(),userDto.getPhone());
+			return GsonUtils.toJsonString(userResponse);
+		}else{
+			BizCheckUtils.checkNull(userDto,"用户不存在");
+			return null;
+		}
+
 	}
 
 
