@@ -52,19 +52,7 @@ public class RoomController extends AbstractController{
 
 	@RequestMapping(value="/room/{roomid}/enter",method = {PUT})
 	public void enterRoom(@PathVariable String roomid , @RequestAttribute(value="username")String username) {
-		// TODO: 2021/7/4
-//		RoomDto roomDto = roomRepository.queryRoomById(roomid);
-//		BizCheckUtils.checkNull(roomDto,"房间不存在");
-//		// TODO: 2021/7/7
-//		//查询用户房间号，暂未使用缓存
-//		UserDto userDto = userRepository.queryUser(username);
-//		if(userDto.getRoomId()!=roomid){
-//			userDto.setRoomId(roomid);
-//			userRepository.updateUser(roomid,username);
-//		}
-
 		BizCheckUtils.check(roomService.enterRoom(Integer.valueOf(roomid) , username) , "房间不存在");
-
 	}
 
 	@RequestMapping(value="/roomLeave",method = PUT)
@@ -89,8 +77,11 @@ public class RoomController extends AbstractController{
 	@RequestMapping(value="/room/{roomid}/users",method = {GET})
 	public String roomUserList(@PathVariable String roomid) {
 		int roomId = Integer.parseInt(roomid);
-		Set<String> users = roomService.queryRoomUsers(roomId);
-		return GsonUtils.toJsonString(users);
+		RoomDto roomDto = roomRepository.queryRoomById(roomId);
+		if(roomDto==null){
+			throw new ChatException("invalid roomId");
+		}
+		return GsonUtils.toJsonString(roomService.queryRoomUsers(roomId));
 	}
 
 	@PassToken

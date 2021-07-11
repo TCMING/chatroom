@@ -13,6 +13,15 @@
         where u.username=#{userName}
     </select>
 
+    <select id="queryUsersByRoomId" parameterType="java.lang.Integer"
+            resultType="java.lang.String">
+        SELECT
+            username
+        FROM
+            user
+        where roomId = #{roomId}
+    </select>
+
     <insert id="saveUser" parameterType="com.uestc.controllerteam.chartservice.dto.UserDto">
         insert into user (username,
         firstName, lastName, email,

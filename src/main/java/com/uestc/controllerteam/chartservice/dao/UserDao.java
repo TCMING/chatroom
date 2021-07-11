@@ -17,4 +17,6 @@ public interface UserDao {
 
 	int updateUser(int roomId , String username);
 
+	List<String> queryUsersByRoomId(int roomId);
+
 }

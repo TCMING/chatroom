@@ -1,9 +1,12 @@
 package com.uestc.controllerteam.chartservice.repository;
 
 import com.uestc.controllerteam.chartservice.dao.UserDao;
+import com.uestc.controllerteam.chartservice.dto.RoomDto;
 import com.uestc.controllerteam.chartservice.dto.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * @Author tianchengming
@@ -29,7 +32,9 @@ public class UserRepository {
         return userDao.updateUser(roomId , username) <= 1;
     }
 
-
+//    public List<String> queryUsersByRoomId(int roomId){
+//        return userDao.queryUsersByRoomId(roomId);
+//    }
 
 
 }
