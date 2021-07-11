@@ -68,7 +68,7 @@ public class RoomController extends AbstractController{
 	}
 
 	@RequestMapping(value="/roomLeave",method = PUT)
-	public void roomLeave(@RequestParam(value="username")String username) {
+	public void roomLeave(@RequestAttribute(value="username")String username) {
 		// TODO: 2021/7/4
 		BizCheckUtils.check(roomService.roomLeave(username) , "异常");
 	}
@@ -78,6 +78,10 @@ public class RoomController extends AbstractController{
 	public String roomIdList(@PathVariable String roomid) {
 		int roomId = Integer.parseInt(roomid);
 		RoomDto roomDto = roomRepository.queryRoomById(roomId);
+
+		if(roomDto==null){
+			throw new ChatException("invalid roomId");
+		}
 		return roomDto.getName();
 	}
 

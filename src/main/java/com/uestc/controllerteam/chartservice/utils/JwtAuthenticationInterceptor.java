@@ -17,7 +17,6 @@ public class JwtAuthenticationInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object object) throws RuntimeException {
-        // 从请求头中取出 token  这里需要和前端约定好把jwt放到请求头一个叫token的地方
         String token = request.getHeader("Authorization");
         // 如果不是映射到方法直接通过
         if (!(object instanceof HandlerMethod)) {
@@ -32,20 +31,15 @@ public class JwtAuthenticationInterceptor implements HandlerInterceptor {
                 return true;
             }
         }
-        //默认全部检查
         else {
-            // 执行认证
             if (token == null) {
-                //这里其实是登录失效,没token了   这个错误也是我自定义的，读者需要自己修改
                 throw new RuntimeException("无token，请重新登录");
             }
 
             // 获取 token 中的 userName
             String username = JwtUtils.getAudience(token);
             UserDto user = userRepository.queryUser(username);
-
             if (user == null) {
-                //这个错误也是我自定义的
                 throw new RuntimeException("用户不存在！");
             }
 

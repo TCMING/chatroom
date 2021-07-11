@@ -49,7 +49,6 @@ public class RoomService {
 //		}
 		UserDto user = userRepository.queryUser(username);
 		if(user.getRoomId()!=roomId){
-//			user.setRoomId(roomId);
 			userRepository.updateUser(roomId,username);
 		}
 		return true;
@@ -62,7 +61,6 @@ public class RoomService {
 		if(user.getRoomId()<=0){
 			return true;
 		}
-//		user.setRoomId(0);
 		return userRepository.updateUser(0,username);
 	}
 
