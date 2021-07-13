@@ -12,7 +12,7 @@
         insert into room (`name`) values (#{name,jdbcType=VARCHAR})
     </select>
 
-    <select id="queryRoomRecord" parameterType="com.uestc.controllerteam.chartservice.model.QueryControlData"
+    <select id="queryRoomRecord" parameterType="com.uestc.controllerteam.chartservice.model.PageDto"
             resultType="com.uestc.controllerteam.chartservice.dto.RoomDto">
         SELECT
             *
@@ -20,7 +20,7 @@
             room
         WHERE 1=1
             ORDER BY room.id desc
-        LIMIT #{pageIndex},#{pageSize};
+        limit #{startIndex},#{pageSize};
     </select>
 
     <select id="queryRoomById" parameterType="java.lang.Integer"

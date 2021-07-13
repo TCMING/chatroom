@@ -3,6 +3,7 @@ package com.uestc.controllerteam.chartservice.repository;
 import com.uestc.controllerteam.chartservice.dao.RoomDao;
 import com.uestc.controllerteam.chartservice.dao.RoomRedisDao;
 import com.uestc.controllerteam.chartservice.dto.RoomDto;
+import com.uestc.controllerteam.chartservice.model.PageDto;
 import com.uestc.controllerteam.chartservice.model.QueryControlData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,7 +29,8 @@ public class RoomRepository {
     }
 
     public List<RoomDto> queryRoomRecord(QueryControlData controlData){
-        return roomDao.queryRoomRecord(controlData);
+        int startIndex = controlData.getPageIndex()*controlData.getPageSize();
+        return roomDao.queryRoomRecord(new PageDto(startIndex,controlData.getPageSize()));
     }
 
     public List<RoomDto> queryAll(){

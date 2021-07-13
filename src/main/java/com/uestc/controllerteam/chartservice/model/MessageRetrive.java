@@ -16,6 +16,6 @@ public class MessageRetrive {
 
     private String text;
 
-    private long timestamp;
+    private String timestamp;
 
 }

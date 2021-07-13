@@ -15,11 +15,14 @@ public class MessageDto implements Serializable{
 
 	private long timestamp;
 
-	public MessageDto(String id, String text, String username, int roomId, long timestamp) {
+	public MessageDto(String id, String text, String username, int roomId, Long timestamp) {
 		this.id = id;
 		this.text = text;
 		this.username = username;
 		this.roomId = roomId;
 		this.timestamp = timestamp;
+	}
+
+	public MessageDto() {
 	}
 }

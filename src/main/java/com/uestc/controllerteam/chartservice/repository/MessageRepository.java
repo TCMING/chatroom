@@ -6,6 +6,7 @@ import com.uestc.controllerteam.chartservice.model.MessageRetrive;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -22,7 +23,7 @@ public class MessageRepository {
     private MessageDao messageDao;
 
     public boolean saveMessage(MessageDto messageDto){
-        return messageDao.saveMessage(messageDto) == 0;
+        return messageDao.saveMessage(messageDto) == 1;
     }
 
     public MessageDto queryMessage(String id){
@@ -32,9 +33,10 @@ public class MessageRepository {
     public List<MessageRetrive> queryMessages(int roomId, int pageIndex, int pageSize){
         HashMap<String,Integer> params = new HashMap<>();
         params.put("roomId" , roomId);
-        params.put("pageIndex" , pageIndex);
+        params.put("startIndex" , (-1-pageIndex)*pageSize);
         params.put("pageSize" , pageSize);
         return messageDao.queryAllMessage(params);
+
     }
 
 

@@ -87,6 +87,9 @@ public class RoomController extends AbstractController{
 	@PassToken
 	@RequestMapping(value="/roomList",method = {POST})
 	public String roomList(@RequestBody QueryControlData roomControl) {
+		if(roomControl.getPageIndex()<0){
+			throw new ChatException("invalid input");
+		}
 		List<RoomDto> roomDtoList = roomRepository.queryRoomRecord(roomControl);
 		return GsonUtils.toJsonString(roomDtoList);
 	}

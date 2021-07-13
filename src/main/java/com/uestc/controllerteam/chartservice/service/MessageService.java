@@ -35,7 +35,7 @@ public class MessageService {
 		long curTime = System.currentTimeMillis();
 		// TODO: 2021/7/8 查用户的房间
 		UserDto userDto = userRepository.queryUser(username);
-		if(userDto==null){
+		if(userDto==null || userDto.getRoomId()==0){
 			return false;
 		}
 		messageDto = new MessageDto(id,text, username, userDto.getRoomId(),curTime);
@@ -46,16 +46,8 @@ public class MessageService {
 
 		List<MessageRetrive> messageDtoList =  messageRepository.queryMessages(roomId,
 				controlData.getPageIndex(),controlData.getPageSize());
-		List<MessageRetrive> messageRetrives = new LinkedList<>();
 
-//		if(!CollectionUtils.isEmpty(messageDtoList)){
-//			for(MessageDto messageDto : messageDtoList){
-//				MessageRetrive message = new MessageRetrive(
-//						messageDto.getId(),messageDto.getText(),messageDto.getTimestamp());
-//				messageRetrives.add(message);
-//			}
-//		}
-		return messageRetrives;
+		return messageDtoList;
 	}
 
 }

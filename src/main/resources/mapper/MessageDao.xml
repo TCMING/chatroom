@@ -9,8 +9,8 @@
     <insert id="saveMessage" parameterType="com.uestc.controllerteam.chartservice.dto.MessageDto">
         insert into message (id, text, timestamp,
         roomId, username)
-        values (#{id}, #{text,jdbcType=VARCHAR}, #{timestamp,jdbcType=VARCHAR},
-        #{roomId,jdbcType=INTEGER}, #{username})
+        values (#{id}, #{text}, #{timestamp},
+        #{roomId}, #{username})
     </insert>
     <update id="updateByPrimaryKey" parameterType="com.uestc.controllerteam.chartservice.dto.MessageDto">
         update message
@@ -20,16 +20,16 @@
         username = #{username}
         where id = #{id}
     </update>
-    <select id="queryMessage" parameterType="java.lang.Long" resultType="com.uestc.controllerteam.chartservice.dto.MessageDto">
+    <select id="queryMessage" parameterType="java.lang.String" resultType="com.uestc.controllerteam.chartservice.dto.MessageDto">
         select id, text, timestamp, roomId, username
         from message
         where id = #{id}
     </select>
     <select id="queryAllMessage"  parameterType="java.util.HashMap" resultType="com.uestc.controllerteam.chartservice.model.MessageRetrive">
-        select id, text, timestamp
+        select id, text, CONCAT(timestamp,'')
         from message
         where roomId = #{roomId}
-        order by id desc
-        LIMIT #{pageIndex},#{pageSize};
+        order by timestamp desc
+        LIMIT #{startIndex},#{pageSize};
     </select>
 </mapper>
