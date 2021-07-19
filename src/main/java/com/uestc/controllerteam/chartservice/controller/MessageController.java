@@ -13,10 +13,7 @@ import com.uestc.controllerteam.chartservice.utils.GsonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -36,12 +33,18 @@ public class MessageController  extends AbstractController {
 	private MessageRepository messageRepository;
 
 	@RequestMapping(value="/message/send")
-	public void receive(@RequestBody MessageRetrive message , @RequestParam(value="username")String username) {
+	public void receive(@RequestBody MessageRetrive message , @RequestAttribute(value="username")String username) {
+
 		BizCheckUtils.check(messageService.recvMessage(username,message.getId(),message.getText()), "Invalid input");
+
 	}
 
 	@RequestMapping(value="/message/retrieve")
-	public String pullMessage(@RequestBody QueryControlData queryControlData , @RequestParam(value="username")String username){
+	public String pullMessage(@RequestBody QueryControlData queryControlData , @RequestAttribute(value="username")String username){
+		if(queryControlData.getPageIndex()>-1 || queryControlData.getPageSize()<1){
+			BizCheckUtils.check(false,"无效输入");
+		}
+
 		UserDto userDto = userRepository.queryUser(username);
 		BizCheckUtils.checkNull(userDto,"Invalid input");
 

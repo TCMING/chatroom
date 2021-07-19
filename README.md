@@ -68,3 +68,5 @@ insert into room (name)
 5.roomService.roomLeave 持久化了，题意不需要持久化
 6.接口幂等、并发安全
 7.内存、redis、mysql数据一致性
+
+8.order by limit
