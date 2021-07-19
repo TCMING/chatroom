@@ -31,7 +31,7 @@ public class UserController  extends AbstractController{
 	@RequestMapping(value="/userLogin",method = {GET})
 	public String room(@RequestParam(value="username")String username, @RequestParam(value="password")String password) {
 		if(!userService.userPasswordCheck(username, password))
-			throw new ChatException("账号或密码错误");
+			throw new ChatException("Invalid username or password.");
 
 		String jwtToken = JwtUtils.createToken(username);
 		return GsonUtils.toJsonString(jwtToken);
