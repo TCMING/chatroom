@@ -40,16 +40,16 @@ public class UserController  extends AbstractController{
 	@PassToken
 	@RequestMapping(value="/user/{username}",method = {GET})
 	public String room(@PathVariable String username) {
-		UserDto userDto = userService.queryUserByName(username);
-		if(userDto!=null){
+		BizCheckUtils.checkNull(username, "Invalid username supplied");
+		try {
+			UserDto userDto = userService.queryUserByName(username);
+			BizCheckUtils.checkNull(userDto,"Invalid username supplied");
 			UserResponse userResponse = new UserResponse(userDto.getFirstName(),userDto.getLastName(),
-					userDto.getEmail(),userDto.getPhone());
+						userDto.getEmail(),userDto.getPhone());
 			return GsonUtils.toJsonString(userResponse);
-		}else{
-			BizCheckUtils.checkNull(userDto,"用户不存在");
-			return null;
+		}catch (Exception e){
+			throw new ChatException("Invalid username supplied");
 		}
-
 	}
 
 

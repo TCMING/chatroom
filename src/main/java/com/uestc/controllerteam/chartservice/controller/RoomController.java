@@ -12,6 +12,7 @@ import com.uestc.controllerteam.chartservice.utils.BizCheckUtils;
 import com.uestc.controllerteam.chartservice.utils.ChatException;
 import com.uestc.controllerteam.chartservice.utils.GsonUtils;
 import com.uestc.controllerteam.chartservice.utils.PassToken;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,18 +42,23 @@ public class RoomController extends AbstractController{
 	private UserService userService;
 
 	@RequestMapping(value="/room",method = {POST})
-	public void room(@RequestBody Room room) {
+	public String room(@RequestBody Room room) {
 		try {
-			roomRepository.saveRoom(room.getName());
+			BizCheckUtils.check(room != null && StringUtils.isNotBlank(room.getName()),"Invalid input");
+			RoomDto roomDto = roomRepository.queryRoomByName(room.getName());
+			if(roomDto == null){
+				roomDto = roomRepository.saveRoom(room.getName());
+			}
+			return String.valueOf(roomDto.getId());
 		} catch (Exception e) {
 			logger.error("error",e);
-			throw new ChatException("异常");
+			throw new ChatException("Invalid input");
 		}
 	}
 
 	@RequestMapping(value="/room/{roomid}/enter",method = {PUT})
 	public void enterRoom(@PathVariable String roomid , @RequestAttribute(value="username")String username) {
-		BizCheckUtils.check(roomService.enterRoom(Integer.valueOf(roomid) , username) , "房间不存在");
+		BizCheckUtils.check(roomService.enterRoom(Integer.parseInt(roomid) , username) , "房间不存在");
 	}
 
 	@RequestMapping(value="/roomLeave",method = PUT)
@@ -65,12 +71,13 @@ public class RoomController extends AbstractController{
 	@RequestMapping(value="/room/{roomid}",method = {GET})
 	public String roomIdList(@PathVariable String roomid) {
 		int roomId = Integer.parseInt(roomid);
-		RoomDto roomDto = roomRepository.queryRoomById(roomId);
-
-		if(roomDto==null){
+		try {
+			RoomDto roomDto = roomRepository.queryRoomById(roomId);
+			BizCheckUtils.checkNull(roomDto,"invalid roomId");
+			return roomDto.getName();
+		}catch (Exception e){
 			throw new ChatException("invalid roomId");
 		}
-		return roomDto.getName();
 	}
 
 	@PassToken
@@ -79,7 +86,7 @@ public class RoomController extends AbstractController{
 		int roomId = Integer.parseInt(roomid);
 		RoomDto roomDto = roomRepository.queryRoomById(roomId);
 		if(roomDto==null){
-			throw new ChatException("invalid roomId");
+			throw new ChatException("Invalid Room ID");
 		}
 		return GsonUtils.toJsonString(roomService.queryRoomUsers(roomId));
 	}

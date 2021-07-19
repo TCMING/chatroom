@@ -1,8 +1,8 @@
 package com.uestc.controllerteam.chartservice.repository;
 
 import com.uestc.controllerteam.chartservice.dao.UserDao;
-import com.uestc.controllerteam.chartservice.dto.RoomDto;
 import com.uestc.controllerteam.chartservice.dto.UserDto;
+import com.uestc.controllerteam.chartservice.utils.BizCheckUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +21,8 @@ public class UserRepository {
 
 
     public UserDto queryUser(String userName){
+        BizCheckUtils.checkNull(userName,"Invalid input");
+
         return userDao.queryUser(userName);
     }
 
@@ -31,10 +33,5 @@ public class UserRepository {
     public boolean updateUser(int roomId , String username){
         return userDao.updateUser(roomId , username) <= 1;
     }
-
-//    public List<String> queryUsersByRoomId(int roomId){
-//        return userDao.queryUsersByRoomId(roomId);
-//    }
-
 
 }

@@ -32,4 +32,13 @@
         where r.id=#{roomId}
     </select>
 
+    <select id="queryRoomByName" parameterType="java.lang.String"
+            resultType="com.uestc.controllerteam.chartservice.dto.RoomDto">
+        SELECT
+        *
+        FROM
+        room r
+        where r.name=#{name}
+    </select>
+
 </mapper>

@@ -23,8 +23,9 @@ public class RoomRepository {
     @Autowired
     private RoomRedisDao roomRedisDao;
 
-    public void saveRoom(String name){
+    public RoomDto saveRoom(String name){
         roomDao.insert(name);
+        return roomDao.queryRoomByName(name);
     }
 
     public List<RoomDto> queryRoomRecord(QueryControlData controlData){
@@ -37,6 +38,10 @@ public class RoomRepository {
 
     public RoomDto queryRoomById(int roomId){
         return roomDao.queryRoomById(roomId);
+    }
+
+    public RoomDto queryRoomByName(String name){
+        return roomDao.queryRoomByName(name);
     }
 
 }

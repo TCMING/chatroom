@@ -37,17 +37,13 @@ public class MessageController  extends AbstractController {
 
 	@RequestMapping(value="/message/send")
 	public void receive(@RequestBody MessageRetrive message , @RequestParam(value="username")String username) {
-
-		BizCheckUtils.check(messageService.recvMessage(username,message.getId(),message.getText())
-				, "无效输入");
+		BizCheckUtils.check(messageService.recvMessage(username,message.getId(),message.getText()), "Invalid input");
 	}
 
 	@RequestMapping(value="/message/retrieve")
 	public String pullMessage(@RequestBody QueryControlData queryControlData , @RequestParam(value="username")String username){
 		UserDto userDto = userRepository.queryUser(username);
-		if(userDto==null){
-			BizCheckUtils.check(false,"无效输入");
-		}
+		BizCheckUtils.checkNull(userDto,"Invalid input");
 
 		List<MessageRetrive> messageRetrives = messageService.pullMessage(userDto.getRoomId() , queryControlData);
 		return GsonUtils.toJsonString(messageRetrives);

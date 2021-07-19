@@ -18,4 +18,6 @@ public interface RoomDao {
 
 	RoomDto queryRoomById(int roomId);
 
+	RoomDto queryRoomByName(String name);
+
 }
