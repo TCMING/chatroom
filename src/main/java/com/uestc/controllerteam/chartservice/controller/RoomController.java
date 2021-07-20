@@ -45,11 +45,7 @@ public class RoomController extends AbstractController{
 	public String room(@RequestBody Room room) {
 		try {
 			BizCheckUtils.check(room != null && StringUtils.isNotBlank(room.getName()),"Invalid input");
-			RoomDto roomDto = roomRepository.queryRoomByName(room.getName());
-			if(roomDto == null){
-				roomDto = roomRepository.saveRoom(room.getName());
-			}
-			return String.valueOf(roomDto.getId());
+			return roomRepository.saveRoom(room.getName());
 		} catch (Exception e) {
 			logger.error("error",e);
 			throw new ChatException("Invalid input");

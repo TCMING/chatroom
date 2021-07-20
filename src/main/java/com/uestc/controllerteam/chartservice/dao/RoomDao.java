@@ -13,7 +13,7 @@ public interface RoomDao {
 
 	List<RoomDto> queryAll();
 
-	void insert(String name);
+	void insert(RoomDto roomDto);
 
 	List<RoomDto> queryRoomRecord(PageDto pageDto);
 

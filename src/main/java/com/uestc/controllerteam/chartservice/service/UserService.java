@@ -35,7 +35,7 @@ public class UserService {
     public boolean registryUser(UserRequest user){
         UserDto userDto = userRepository.queryUser(user.getUsername());
         if(userDto != null){
-            return true;
+            return false;
         }
         userDto = new UserDto();
         userDto.setUsername(user.getUsername());

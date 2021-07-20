@@ -24,9 +24,11 @@ public class RoomRepository {
     @Autowired
     private RoomRedisDao roomRedisDao;
 
-    public RoomDto saveRoom(String name){
-        roomDao.insert(name);
-        return roomDao.queryRoomByName(name);
+    public String saveRoom(String name){
+        RoomDto roomDto = new RoomDto();
+        roomDto.setName(name);
+        roomDao.insert(roomDto);
+        return String.valueOf(roomDto.getId());
     }
 
     public List<RoomDto> queryRoomRecord(QueryControlData controlData){

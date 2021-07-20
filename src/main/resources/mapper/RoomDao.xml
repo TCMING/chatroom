@@ -8,9 +8,10 @@
         SELECT * FROM room;
     </select>
 
-    <select id="insert" parameterType="java.lang.String">
+    <insert id="insert" parameterType="com.uestc.controllerteam.chartservice.dto.RoomDto"
+            keyProperty="id" useGeneratedKeys="true">
         insert into room (`name`) values (#{name,jdbcType=VARCHAR})
-    </select>
+    </insert>
 
     <select id="queryRoomRecord" parameterType="com.uestc.controllerteam.chartservice.model.PageDto"
             resultType="com.uestc.controllerteam.chartservice.dto.RoomDto">
@@ -19,7 +20,7 @@
         FROM
             room
         WHERE 1=1
-            ORDER BY room.id desc
+            ORDER BY room.id asc
         limit #{startIndex},#{pageSize};
     </select>
 
