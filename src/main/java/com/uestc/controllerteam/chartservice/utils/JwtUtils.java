@@ -9,6 +9,8 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.uestc.controllerteam.chartservice.exception.AuthException;
 import com.uestc.controllerteam.chartservice.exception.AuthException2;
 import com.uestc.controllerteam.chartservice.exception.AuthException3;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -18,6 +20,8 @@ import java.util.Date;
  * @create: 2020-02-04
  */
 public class JwtUtils {
+
+    private static Logger logger = LoggerFactory.getLogger(JwtUtils.class);
 
     /**
      签发对象：这个用户的id
@@ -48,6 +52,7 @@ public class JwtUtils {
             JWTVerifier verifier = JWT.require(Algorithm.HMAC256(secret+"hello")).build();
             jwt = verifier.verify(token);
         } catch (Exception e) {
+            logger.error("----",e);
             //效验失败
             throw new AuthException2("token校验失败");
         }
