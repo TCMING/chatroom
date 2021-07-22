@@ -32,13 +32,13 @@ public class JwtUtils {
      */
     public static String createToken(String username) {
 
-        Calendar nowTime = Calendar.getInstance();
-        nowTime.add(Calendar.MINUTE,60);
-        Date expiresDate = nowTime.getTime();
+//        Calendar nowTime = Calendar.getInstance();
+//        nowTime.add(Calendar.MINUTE,6000);
+//        Date expiresDate = nowTime.getTime();
 
         return JWT.create().withAudience(username)   //签发对象
-                .withIssuedAt(new Date())    //发行时间
-                .withExpiresAt(expiresDate)  //有效时间
+//                .withIssuedAt(new Date())    //发行时间
+//                .withExpiresAt(expiresDate)  //有效时间
                 .sign(Algorithm.HMAC256(username+"hello"));   //加密
     }
 
