@@ -1,5 +1,6 @@
 package com.uestc.controllerteam.chartservice.utils;
 
+import com.uestc.controllerteam.chartservice.dto.AuthException;
 import com.uestc.controllerteam.chartservice.dto.UserDto;
 import com.uestc.controllerteam.chartservice.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,12 +34,12 @@ public class JwtAuthenticationInterceptor implements HandlerInterceptor {
         }else {
             String token = null;
             if (authorization == null) {
-                throw new RuntimeException("无token，请重新登录");
+                throw new AuthException("无token，请重新登录");
             }else {
                 try {
                     token = authorization.split(" ")[1];
                 } catch (Exception e) {
-                    throw new RuntimeException("无token，请重新登录");
+                    throw new AuthException("无token，请重新登录");
                 }
             }
 
@@ -46,7 +47,7 @@ public class JwtAuthenticationInterceptor implements HandlerInterceptor {
             String username = JwtUtils.getAudience(token);
             UserDto user = userRepository.queryUser(username);
             if (user == null) {
-                throw new RuntimeException("用户不存在！");
+                throw new AuthException("用户不存在！");
             }
 
             // 验证 token

@@ -1,6 +1,7 @@
 package com.uestc.controllerteam.chartservice.controller;
 
 import com.google.gson.Gson;
+import com.uestc.controllerteam.chartservice.dto.AuthException;
 import com.uestc.controllerteam.chartservice.utils.GsonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +21,16 @@ public abstract class AbstractController {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
     public String handleException(HttpServletRequest request,
+                                  Exception ex,
+                                  HttpServletResponse response) {
+        logger.error("未处理异常", ex);
+        return createJsonResponse(null);
+    }
+
+    @ExceptionHandler(AuthException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ResponseBody
+    public String handleAuthException(HttpServletRequest request,
                                   Exception ex,
                                   HttpServletResponse response) {
         logger.error("未处理异常", ex);
