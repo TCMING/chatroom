@@ -6,7 +6,9 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.uestc.controllerteam.chartservice.dto.AuthException;
+import com.uestc.controllerteam.chartservice.exception.AuthException;
+import com.uestc.controllerteam.chartservice.exception.AuthException2;
+import com.uestc.controllerteam.chartservice.exception.AuthException3;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -47,7 +49,7 @@ public class JwtUtils {
             jwt = verifier.verify(token);
         } catch (Exception e) {
             //效验失败
-            throw new AuthException("token校验失败");
+            throw new AuthException2("token校验失败");
         }
     }
 
@@ -60,7 +62,7 @@ public class JwtUtils {
             audience = JWT.decode(token).getAudience().get(0);
         } catch (JWTDecodeException j) {
             //这里是token解析失败
-            throw new AuthException("token解析失败");
+            throw new AuthException3("token解析失败");
         }
         return audience;
     }

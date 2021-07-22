@@ -1,7 +1,9 @@
 package com.uestc.controllerteam.chartservice.utils;
 
-import com.uestc.controllerteam.chartservice.dto.AuthException;
+import com.uestc.controllerteam.chartservice.exception.AuthException;
 import com.uestc.controllerteam.chartservice.dto.UserDto;
+import com.uestc.controllerteam.chartservice.exception.NonUserException;
+import com.uestc.controllerteam.chartservice.exception.SplitException;
 import com.uestc.controllerteam.chartservice.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.method.HandlerMethod;
@@ -39,7 +41,7 @@ public class JwtAuthenticationInterceptor implements HandlerInterceptor {
                 try {
                     token = authorization.split(" ")[1];
                 } catch (Exception e) {
-                    throw new AuthException("无token，请重新登录");
+                    throw new SplitException("无token，请重新登录");
                 }
             }
 
@@ -47,7 +49,7 @@ public class JwtAuthenticationInterceptor implements HandlerInterceptor {
             String username = JwtUtils.getAudience(token);
             UserDto user = userRepository.queryUser(username);
             if (user == null) {
-                throw new AuthException("用户不存在！");
+                throw new NonUserException("用户不存在！");
             }
 
             // 验证 token

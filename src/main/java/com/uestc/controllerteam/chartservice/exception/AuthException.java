@@ -1,4 +1,4 @@
-package com.uestc.controllerteam.chartservice.dto;
+package com.uestc.controllerteam.chartservice.exception;
 
 public class AuthException extends RuntimeException{
 

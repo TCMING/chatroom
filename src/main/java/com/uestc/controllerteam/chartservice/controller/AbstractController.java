@@ -1,7 +1,6 @@
 package com.uestc.controllerteam.chartservice.controller;
 
-import com.google.gson.Gson;
-import com.uestc.controllerteam.chartservice.dto.AuthException;
+import com.uestc.controllerteam.chartservice.exception.*;
 import com.uestc.controllerteam.chartservice.utils.GsonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,6 +32,46 @@ public abstract class AbstractController {
     public String handleAuthException(HttpServletRequest request,
                                   Exception ex,
                                   HttpServletResponse response) {
+        logger.error("未处理异常", ex);
+        return createJsonResponse(null);
+    }
+
+    @ExceptionHandler(NonUserException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ResponseBody
+    public String handleNonUserException(HttpServletRequest request,
+                                      Exception ex,
+                                      HttpServletResponse response) {
+        logger.error("未处理异常", ex);
+        return createJsonResponse(null);
+    }
+
+    @ExceptionHandler(SplitException.class)
+    @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
+    @ResponseBody
+    public String handleSplitException(HttpServletRequest request,
+                                         Exception ex,
+                                         HttpServletResponse response) {
+        logger.error("未处理异常", ex);
+        return createJsonResponse(null);
+    }
+
+    @ExceptionHandler(AuthException2.class)
+    @ResponseStatus(HttpStatus.PROXY_AUTHENTICATION_REQUIRED)
+    @ResponseBody
+    public String handleAuth2Exception(HttpServletRequest request,
+                                       Exception ex,
+                                       HttpServletResponse response) {
+        logger.error("未处理异常", ex);
+        return createJsonResponse(null);
+    }
+
+    @ExceptionHandler(AuthException3.class)
+    @ResponseStatus(HttpStatus.PRECONDITION_FAILED)
+    @ResponseBody
+    public String handleAuth3Exception(HttpServletRequest request,
+                                       Exception ex,
+                                       HttpServletResponse response) {
         logger.error("未处理异常", ex);
         return createJsonResponse(null);
     }
