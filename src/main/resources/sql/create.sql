@@ -53,6 +53,34 @@ DEFAULT CHARSET = utf8
 COMMENT = '消息';
 
 
+explain
+       SELECT
+            *
+        FROM
+            room
+        WHERE 1=1
+            ORDER BY room.id asc
+        LIMIT 100000,100;
+
+
+explain select *
+        from room
+        order by name desc
+        LIMIT 100000,100;
+
+explain select id
+        from room
+        order by name desc
+        LIMIT 100000,100;
+
+
+explain
+    select id, text, CONCAT(timestamp,'')
+        from message
+        where roomId = 1
+        order by timestamp desc
+        LIMIT 100000,100;
+
 
 
 

@@ -1,72 +1,15 @@
+ 2021.7.23：  
+ 待确认/优化：  
+ sql分页:order by 、 limit  目前没有发现可以优化的点  
+ （1）SELECT * FROM room WHERE 1=1 ORDER BY room.id asc LIMIT 100000,100; 未优化，通过expalin看,使用了主键、也没有额外排序。
+  但extra字段为null，同类型的sql如果order by普通索引，extra字段为using index。老田要去确认下
+ （2）select id, text, CONCAT(timestamp,'') from message where roomId = 1 order by timestamp desc LIMIT 100000,100;问题同上
+ token 目前验证token有问题  
+ 貌似压测工具比较呆板，目前基本没考虑并发安全，但是没遇到问题，所以考虑1.要不要去掉syn 2.业务逻辑是不是可以不做某些检查    
+ 缓存：  
+ （1）enterRoom、roomLeave涉及到是否缓存在线用户的问题、目前还没使用到缓存    
+ enterRoom中缓存用户列表线程安全问题，原hash,暂改concurrentHash ; 内存or redis
+ 接口幂等、并发安全  
+ 内存、redis、mysql数据一致性  
 
-
-## 数据库
-我到底更爱Spurs还是Eason:
-create DATABASE  chatService;
-use chatService;
-
-drop table room;
-drop TABLE userRequest;
-drop TABLE message;
-
-
-select * from room;
-select * from userRequest;
-select * from message;
-
-
-create table room(
-  id int NOT NULL AUTO_INCREMENT,
-  name VARCHAR(200) NOT NULL,
-  PRIMARY KEY(id),
-  key(name)
-)ENGINE = innoDB
-  AUTO_INCREMENT = 1
-  DEFAULT CHARSET = utf8
-  COMMENT = '房间';
-
-
-
-create table userRequest(
-    id int NOT NULL AUTO_INCREMENT,
-    username VARCHAR(200) NOT NULL,
-    firstName VARCHAR(200) NOT NULL,
-    lastName VARCHAR(200) NOT NULL,
-    email VARCHAR(200) NOT NULL,
-    password VARCHAR(200) NOT NULL,
-    phone VARCHAR(200) NOT NULL,
-    PRIMARY KEY(id),
-    UNIQUE KEY(username)
-)ENGINE = innoDB
-  AUTO_INCREMENT = 1
-  DEFAULT CHARSET = utf8
-  COMMENT = '用户';
-
-
-
-create table message(
-    id BIGINT NOT NULL,
-    text varchar(200) NOT NULL,
-    timestamp varchar(200) NOT NULL,
-    userId int not null,
-    roomId int not null,
-    primary key(id),
-    UNIQUE KEY(userId,roomId)
-)ENGINE = innoDB
-DEFAULT CHARSET = utf8
-COMMENT = '消息';
-
-insert into room (name) 
-  value('one');
-
-
-待确认/优化：
-1.sql分页
-2.GsonUtil线程安全
-3.token
-4.roomService中缓存用户列表线程安全问题，原hash,暂改concurrentHash ; 内存or redis
-5.roomService.roomLeave 持久化了，题意不需要持久化
-6.接口幂等、并发安全
-7.内存、redis、mysql数据一致性
-
-8.order by limit
+    
