@@ -41,9 +41,7 @@ public class MessageController  extends AbstractController {
 
 	@RequestMapping(value="/message/retrieve")
 	public String pullMessage(@RequestBody QueryControlData queryControlData , @RequestAttribute(value="username")String username){
-		if(queryControlData.getPageIndex()>-1 || queryControlData.getPageSize()<1){
-			BizCheckUtils.check(false,"无效输入");
-		}
+		BizCheckUtils.check(queryControlData.getPageIndex() < 0 && queryControlData.getPageSize()>=0,"无效输入");
 
 		UserDto userDto = userRepository.queryUser(username);
 		BizCheckUtils.checkNull(userDto,"Invalid input");

@@ -53,7 +53,7 @@ public class JwtAuthenticationInterceptor implements HandlerInterceptor {
             }
 
             // 验证 token
-            JwtUtils.verifyToken(token, username);
+//            JwtUtils.verifyToken(token, username);
             //放入attribute以便后面调用
             request.setAttribute("username", username);
             return true;
