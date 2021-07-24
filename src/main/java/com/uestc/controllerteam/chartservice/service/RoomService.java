@@ -36,7 +36,8 @@ public class RoomService {
 	}
 
 	// TODO: 2021/7/5 并发同步？ 缓存数据一致性？ 接口幂等性？重复多次传入已进入的房间号，返回成功吗？
-	public synchronized boolean enterRoom(int roomId,String username){
+	//尝试取消sync
+	public boolean enterRoom(int roomId,String username){
 		try {
 			//1.判断房间存在
 			RoomDto roomDto = roomRepository.queryRoomById(roomId);
@@ -62,7 +63,8 @@ public class RoomService {
 		}
 	}
 
-	public synchronized boolean roomLeave(String username){
+	//尝试取消sync
+	public boolean roomLeave(String username){
 		try {
 			// TODO: 2021/7/4 题意不要求持久化在线人数   内存或者redis或者mysql  数据一致性  性能问题
 			//1.获取用户所在房间信息
