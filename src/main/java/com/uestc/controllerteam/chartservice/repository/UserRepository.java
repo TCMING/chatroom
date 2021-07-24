@@ -24,10 +24,12 @@ public class UserRepository {
 
 
     public UserDto queryUser(String userName){
-        UserDto userDto = usersCache.getOrDefault(userName,null);
+        UserDto userDto = usersCache.get(userName);
         if(userDto == null){
             userDto = userDao.queryUser(userName);
-            usersCache.put(userName,userDto);
+            if(userDto != null){
+                usersCache.put(userName,userDto);
+            }
         }
         return userDto;
     }
