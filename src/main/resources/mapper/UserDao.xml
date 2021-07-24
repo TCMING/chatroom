@@ -37,4 +37,8 @@
         where username = #{username}
     </update>
 
+    <select id="queryAll" resultType="com.uestc.controllerteam.chartservice.dto.UserDto">
+        SELECT * FROM user;
+    </select>
+
 </mapper>

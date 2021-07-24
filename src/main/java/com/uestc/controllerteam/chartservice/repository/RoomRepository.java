@@ -6,8 +6,11 @@ import com.uestc.controllerteam.chartservice.dto.RoomDto;
 import com.uestc.controllerteam.chartservice.model.PageDto;
 import com.uestc.controllerteam.chartservice.model.QueryControlData;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -22,7 +25,7 @@ import java.util.function.Consumer;
  * @Version 1.0
  */
 @Service
-public class RoomRepository {
+public class RoomRepository implements InitializingBean {
 
     @Autowired
     private RoomDao roomDao;
@@ -31,7 +34,7 @@ public class RoomRepository {
     private RoomRedisDao roomRedisDao;
 
     //暂时不用内存淘汰，维护全量的room信息
-    private final ConcurrentHashMap<Integer,String> roomsCache = new ConcurrentHashMap<>(1000);
+    private ConcurrentHashMap<Integer,String> roomsCache;
 
     /**
      * TODO 增加事务保证
@@ -51,6 +54,34 @@ public class RoomRepository {
         return roomDao.queryRoomRecord(new PageDto(startIndex,controlData.getPageSize()));
     }
 
+    public RoomDto queryRoomById(int roomId){
+        String roomName = roomsCache.getOrDefault(roomId,null);
+        if(StringUtils.isNotBlank(roomName)){
+            return new RoomDto(roomId,roomsCache.get(roomId));
+        }
+        return null;
+//        RoomDto roomDto = roomDao.queryRoomById(roomId);
+//        if(roomDto != null){
+//            roomsCache.put(roomDto.getId(),roomDto.getName());
+//        }
+//        return roomDto;
+    }
+
+    public RoomDto queryRoomByName(String name){
+        return roomDao.queryRoomByName(name);
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        roomsCache = new ConcurrentHashMap<>(2000);
+        List<RoomDto> roomDtos = roomDao.queryAll();
+        if(!CollectionUtils.isEmpty(roomDtos)){
+            for(RoomDto roomDto: roomDtos){
+                roomsCache.put(roomDto.getId(),roomDto.getName());
+            }
+        }
+    }
+
     public List<RoomDto> queryAll(){
         List<RoomDto> roomDtos = roomDao.queryAll();
 //        List<RoomDto> roomDtos = new LinkedList<>();
@@ -62,22 +93,6 @@ public class RoomRepository {
 //            }
 //        });
         return roomDtos;
-    }
-
-    public RoomDto queryRoomById(int roomId){
-        String roomName = roomsCache.getOrDefault(roomId,null);
-        if(StringUtils.isNotBlank(roomName)){
-            return new RoomDto(roomId,roomsCache.get(roomId));
-        }
-        RoomDto roomDto = roomDao.queryRoomById(roomId);
-        if(roomDto != null){
-            roomsCache.put(roomDto.getId(),roomDto.getName());
-        }
-        return roomDto;
-    }
-
-    public RoomDto queryRoomByName(String name){
-        return roomDao.queryRoomByName(name);
     }
 
 }

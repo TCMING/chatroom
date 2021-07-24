@@ -9,7 +9,7 @@ import java.util.List;
 @Mapper
 public interface UserDao {
 
-	List<RoomDto> queryAll();
+	List<UserDto> queryAll();
 
 	UserDto queryUser(String userName);
 

@@ -29,10 +29,10 @@ public class RoomService {
 	private CacheRepository cacheRepository;
 
 	//暂时不用内存淘汰，维护全量的room-user信息
-	private ConcurrentHashMap<Integer, Set<String>> roomUsers = new ConcurrentHashMap<>(1000);
+	private ConcurrentHashMap<Integer, Set<String>> roomUsersCache = new ConcurrentHashMap<>(1000);
 
 	public List<String> queryRoomUsers(int roomId){
-		Set<String> usernames = roomUsers.getOrDefault(roomId,new HashSet<>());
+		Set<String> usernames = roomUsersCache.getOrDefault(roomId,new HashSet<>());
 		return new ArrayList<>(usernames);
 	}
 
@@ -44,18 +44,25 @@ public class RoomService {
 			if(roomDto == null || StringUtils.isEmpty(roomDto.getName())){
 				return false;
 			}
-			//2.登录房间
-			Set<String> users = roomUsers.get(roomId);
+			//2.用户状态更新
+			UserDto user = userRepository.queryUser(username);
+			int originRoomId = user.getRoomId();
+			//3.最新房间
+			user.setRoomId(roomId);
+			//4.退出房间
+			if(originRoomId > 0){
+				Set<String> originUsers = roomUsersCache.get(originRoomId);
+				if(originUsers != null && originUsers.contains(username)){
+					originUsers.remove(username);
+				}
+			}
+			//5.登录房间
+			Set<String> users = roomUsersCache.get(roomId);
 			if(users == null){
 				users = new HashSet<>();
-				roomUsers.put(roomId,users);
+				roomUsersCache.put(roomId,users);
 			}
-			if(!users.contains(username)){
-				users.add(username);
-			}
-			//3.用户状态更新
-			UserDto user = userRepository.queryUser(username);
-			user.setRoomId(roomId);
+			users.add(username);
 			return true;
 		} catch (Exception e) {
 			logger.error("error" , e);

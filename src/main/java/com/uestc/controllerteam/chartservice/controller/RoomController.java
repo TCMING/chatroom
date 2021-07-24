@@ -80,10 +80,10 @@ public class RoomController extends AbstractController{
 	@RequestMapping(value="/room/{roomid}/users",method = {GET})
 	public String roomUserList(@PathVariable String roomid) {
 		int roomId = Integer.parseInt(roomid);
-		RoomDto roomDto = roomRepository.queryRoomById(roomId);
-		if(roomDto==null){
-			throw new ChatException("Invalid Room ID");
-		}
+//		RoomDto roomDto = roomRepository.queryRoomById(roomId);
+//		if(roomDto==null){
+//			throw new ChatException("Invalid Room ID");
+//		}
 		return GsonUtils.toJsonString(roomService.queryRoomUsers(roomId));
 	}
 

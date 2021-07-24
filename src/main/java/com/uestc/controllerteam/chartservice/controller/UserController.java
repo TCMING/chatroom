@@ -29,7 +29,7 @@ public class UserController  extends AbstractController{
 
 	@PassToken
 	@RequestMapping(value="/userLogin",method = {GET})
-	public String room(@RequestParam(value="username")String username, @RequestParam(value="password")String password) {
+	public String userLogin(@RequestParam(value="username")String username, @RequestParam(value="password")String password) {
 		if(!userService.userPasswordCheck(username, password))
 			throw new ChatException("Invalid username or password.");
 
@@ -39,7 +39,7 @@ public class UserController  extends AbstractController{
 
 	@PassToken
 	@RequestMapping(value="/user/{username}",method = {GET})
-	public String room(@PathVariable String username) {
+	public String userInfo(@PathVariable String username) {
 		BizCheckUtils.checkNull(username, "Invalid username supplied");
 		try {
 			UserDto userDto = userService.queryUserByName(username);
