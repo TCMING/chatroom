@@ -63,7 +63,8 @@ public class RoomService {
 		}
 	}
 
-	public synchronized boolean roomLeave(String username){
+	//尝试取消sync
+	public boolean roomLeave(String username){
 		try {
 			// TODO: 2021/7/4 题意不要求持久化在线人数   内存或者redis或者mysql  数据一致性  性能问题
 			//1.获取用户所在房间信息

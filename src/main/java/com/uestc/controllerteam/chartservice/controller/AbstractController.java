@@ -27,7 +27,7 @@ public abstract class AbstractController {
     }
 
     @ExceptionHandler(AuthException.class)
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
     public String handleAuthException(HttpServletRequest request,
                                   Exception ex,
@@ -37,7 +37,7 @@ public abstract class AbstractController {
     }
 
     @ExceptionHandler(NonUserException.class)
-    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
     public String handleNonUserException(HttpServletRequest request,
                                       Exception ex,
@@ -47,7 +47,7 @@ public abstract class AbstractController {
     }
 
     @ExceptionHandler(SplitException.class)
-    @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
     public String handleSplitException(HttpServletRequest request,
                                          Exception ex,
@@ -67,7 +67,7 @@ public abstract class AbstractController {
     }
 
     @ExceptionHandler(AuthException3.class)
-    @ResponseStatus(HttpStatus.PRECONDITION_FAILED)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
     public String handleAuth3Exception(HttpServletRequest request,
                                        Exception ex,
