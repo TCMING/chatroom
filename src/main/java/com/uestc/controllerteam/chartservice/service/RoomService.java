@@ -1,6 +1,7 @@
 package com.uestc.controllerteam.chartservice.service;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.uestc.controllerteam.chartservice.dto.RoomDto;
 import com.uestc.controllerteam.chartservice.dto.UserDto;
@@ -11,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 @Service
@@ -26,16 +28,15 @@ public class RoomService {
 	@Autowired
 	private CacheRepository cacheRepository;
 
-	// TODO: 2021/7/11 从缓存中获取
-//	public Set<String> queryRoomUsers(int roomId){
-//		return cacheRepository.queryRoomUsers(roomId);
-//	}
+	//暂时不用内存淘汰，维护全量的room-user信息
+	private ConcurrentHashMap<Integer, Set<String>> roomUsers = new ConcurrentHashMap<>(1000);
 
 	public List<String> queryRoomUsers(int roomId){
-		return cacheRepository.queryRoomUsers(roomId);
+		Set<String> usernames = roomUsers.getOrDefault(roomId,new HashSet<>());
+		return new ArrayList<>(usernames);
 	}
 
-	// TODO: 2021/7/5 并发同步？ 缓存数据一致性？ 接口幂等性？重复多次传入已进入的房间号，返回成功吗？
+	// TODO: 2021/7/5 并发同步？ 缓存数据一致性？ 接口幂等性？
 	public synchronized boolean enterRoom(int roomId,String username){
 		try {
 			//1.判断房间存在
@@ -44,17 +45,17 @@ public class RoomService {
 				return false;
 			}
 			//2.登录房间
-			UserDto user = userRepository.queryUser(username);
-			int oldRoomId = user.getRoomId();
-			if(oldRoomId!=roomId){
-				if(userRepository.updateUser(roomId,username)){
-//					//删除旧缓存，不抛异常即成功
-//					cacheRepository.deleteRoomUsers(oldRoomId,username);
-//					//更新缓存
-//					cacheRepository.addRoomUsers(roomId , username);
-				}
-
+			Set<String> users = roomUsers.get(roomId);
+			if(users == null){
+				users = new HashSet<>();
+				roomUsers.put(roomId,users);
 			}
+			if(!users.contains(username)){
+				users.add(username);
+			}
+			//3.用户状态更新
+			UserDto user = userRepository.queryUser(username);
+			user.setRoomId(roomId);
 			return true;
 		} catch (Exception e) {
 			logger.error("error" , e);
@@ -70,9 +71,8 @@ public class RoomService {
 			if(user.getRoomId()<=0){
 				return true;
 			}
-			//先处理缓存
-//			cacheRepository.deleteRoomUsers(user.getRoomId() , username);
-			return userRepository.updateUser(0,username);
+			user.setRoomId(0);
+			return true;
 		} catch (Exception e) {
 			logger.error("error" , e);
 			return false;

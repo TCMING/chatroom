@@ -2,11 +2,9 @@ package com.uestc.controllerteam.chartservice.repository;
 
 import com.uestc.controllerteam.chartservice.dao.UserDao;
 import com.uestc.controllerteam.chartservice.dto.UserDto;
-import com.uestc.controllerteam.chartservice.utils.BizCheckUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @Author tianchengming
@@ -19,17 +17,31 @@ public class UserRepository {
     @Autowired
     private UserDao userDao;
 
+    /**
+     * 内存维护所有用户信息
+     */
+    private ConcurrentHashMap<String,UserDto> usersCache = new ConcurrentHashMap<>(1000);
+
 
     public UserDto queryUser(String userName){
-        BizCheckUtils.checkNull(userName,"Invalid input");
-
-        return userDao.queryUser(userName);
+        UserDto userDto = usersCache.getOrDefault(userName,null);
+        if(userDto == null){
+            userDto = userDao.queryUser(userName);
+            usersCache.put(userName,userDto);
+        }
+        return userDto;
     }
 
     public boolean saveUser(UserDto userDto){
-        return userDao.saveUser(userDto) <= 1;
+        boolean success = userDao.saveUser(userDto) <= 1;
+        if(success){
+            usersCache.put(userDto.getUsername(),userDto);
+        }
+        return success;
     }
 
+    //用户名与房间关系放到缓存，暂时不要
+    @Deprecated
     public boolean updateUser(int roomId , String username){
         return userDao.updateUser(roomId , username) <= 1;
     }

@@ -25,7 +25,7 @@ public class MessageService {
 	private UserRepository userRepository;
 
 	public boolean recvMessage(String username, String id, String text){
-
+		//TODO 幂等性是不是返回true
 		MessageDto messageDto = messageRepository.queryMessage(id);
 		//幂等性
 		if(messageDto != null){
