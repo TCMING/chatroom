@@ -2,8 +2,10 @@ package com.uestc.controllerteam.chartservice.dto;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 @Data
-public class UserDto{
+public class UserDto implements Serializable {
 
 	private int id;
 

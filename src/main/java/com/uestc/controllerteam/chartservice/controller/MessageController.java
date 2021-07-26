@@ -1,10 +1,8 @@
 package com.uestc.controllerteam.chartservice.controller;
 
-import com.uestc.controllerteam.chartservice.dto.MessageDto;
 import com.uestc.controllerteam.chartservice.dto.UserDto;
 import com.uestc.controllerteam.chartservice.model.MessageRetrive;
 import com.uestc.controllerteam.chartservice.model.QueryControlData;
-import com.uestc.controllerteam.chartservice.model.UserRequest;
 import com.uestc.controllerteam.chartservice.repository.MessageRepository;
 import com.uestc.controllerteam.chartservice.repository.UserRepository;
 import com.uestc.controllerteam.chartservice.service.MessageService;
@@ -33,9 +31,9 @@ public class MessageController  extends AbstractController {
 	private MessageRepository messageRepository;
 
 	@RequestMapping(value="/message/send")
-	public void receive(@RequestBody MessageRetrive message , @RequestAttribute(value="username")String username) {
+	public void sendMessage(@RequestBody MessageRetrive message , @RequestAttribute(value="username")String username) {
 
-		BizCheckUtils.check(messageService.recvMessage(username,message.getId(),message.getText()), "Invalid input");
+		BizCheckUtils.check(messageService.sendMessage(username,message.getId(),message.getText()), "Invalid input");
 
 	}
 

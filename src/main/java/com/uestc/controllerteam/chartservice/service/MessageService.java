@@ -24,11 +24,15 @@ public class MessageService {
 	@Autowired
 	private UserRepository userRepository;
 
-	public boolean recvMessage(String username, String id, String text){
+	public boolean sendMessage(String username, String id, String text){
 		//TODO 幂等性是不是返回true
-		MessageDto messageDto = messageRepository.queryMessage(id);
+//		MessageDto messageDto = messageRepository.queryMessage(id);
 		//幂等性
-		if(messageDto != null){
+//		if(messageDto != null){
+//			return false;
+//		}
+
+		if(messageRepository.queryMessage(id)){
 			return false;
 		}
 
@@ -38,7 +42,7 @@ public class MessageService {
 		if(userDto==null || userDto.getRoomId()==0){
 			return false;
 		}
-		messageDto = new MessageDto(id,text, username, userDto.getRoomId(),curTime);
+		MessageDto messageDto = new MessageDto(id,text, username, userDto.getRoomId(),curTime);
 		return messageRepository.saveMessage(messageDto);
 	}
 

@@ -29,7 +29,7 @@ public class RoomService {
 	private CacheRepository cacheRepository;
 
 	//暂时不用内存淘汰，维护全量的room-user信息
-	private ConcurrentHashMap<Integer, Set<String>> roomUsersCache = new ConcurrentHashMap<>(1000);
+	private ConcurrentHashMap<Integer, Set<String>> roomUsersCache = new ConcurrentHashMap<>(2048);
 
 	public List<String> queryRoomUsers(int roomId){
 		Set<String> usernames = roomUsersCache.getOrDefault(roomId,new HashSet<>());
@@ -47,8 +47,12 @@ public class RoomService {
 			//2.用户状态更新
 			UserDto user = userRepository.queryUser(username);
 			int originRoomId = user.getRoomId();
-			//3.最新房间
+			if(roomId == originRoomId){
+				return true;
+			}
+			//3.更新userCache中房间信息
 			user.setRoomId(roomId);
+			//更新roomUserCache
 			//4.退出房间
 			if(originRoomId > 0){
 				Set<String> originUsers = roomUsersCache.get(originRoomId);
@@ -59,7 +63,7 @@ public class RoomService {
 			//5.登录房间
 			Set<String> users = roomUsersCache.get(roomId);
 			if(users == null){
-				users = new HashSet<>();
+				users = new HashSet<>(2048);
 				roomUsersCache.put(roomId,users);
 			}
 			users.add(username);
@@ -74,21 +78,24 @@ public class RoomService {
 	public boolean roomLeave(String username){
 		try {
 			// TODO: 2021/7/4 题意不要求持久化在线人数   内存或者redis或者mysql  数据一致性  性能问题
-			//1.获取用户所在房间信息
+			//维护userCache
 			UserDto user = userRepository.queryUser(username);
-			if(user.getRoomId()<=0){
+			int originRoomId = user.getRoomId();
+			if(originRoomId<=0){
 				return true;
 			}
 			user.setRoomId(0);
+			//维护roomUserCache
+			Set<String> originUsers = roomUsersCache.get(originRoomId);
+			if(originUsers != null && originUsers.contains(username)){
+				originUsers.remove(username);
+			}
+
 			return true;
 		} catch (Exception e) {
 			logger.error("error" , e);
 			return false;
 		}
-	}
-
-	public List<RoomDto> queryAll(){
-		return roomRepository.queryAll();
 	}
 	
 }

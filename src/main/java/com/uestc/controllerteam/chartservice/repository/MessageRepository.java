@@ -1,6 +1,7 @@
 package com.uestc.controllerteam.chartservice.repository;
 
 import com.uestc.controllerteam.chartservice.dao.MessageDao;
+import com.uestc.controllerteam.chartservice.dao.MessageRedisDao;
 import com.uestc.controllerteam.chartservice.dto.MessageDto;
 import com.uestc.controllerteam.chartservice.model.MessageRetrive;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,16 +19,26 @@ import java.util.List;
  */
 @Service
 public class MessageRepository {
+    @Autowired
+    private MessageRedisDao messageRedisDao;
 
     @Autowired
     private MessageDao messageDao;
 
     public boolean saveMessage(MessageDto messageDto){
-        return messageDao.saveMessage(messageDto) == 1;
+//        return messageDao.saveMessage(messageDto) == 1;
+        messageRedisDao.saveMessage(messageDto);
+        return true;
     }
 
-    public MessageDto queryMessage(String id){
-        return messageDao.queryMessage(id);
+
+//    @Deprecated
+//    public MessageDto queryMessage(String id){
+//        return messageDao.queryMessage(id);
+//    }
+
+    public boolean queryMessage(String id){
+        return messageRedisDao.queryMessage(id);
     }
 
     public List<MessageRetrive> queryMessages(int roomId, int pageIndex, int pageSize){
@@ -35,7 +46,8 @@ public class MessageRepository {
         params.put("roomId" , roomId);
         params.put("startIndex" , (-1-pageIndex)*pageSize);
         params.put("pageSize" , pageSize);
-        return messageDao.queryAllMessage(params);
+//        return messageDao.queryAllMessage(params);
+        return messageRedisDao.queryAllMessage(params);
 
     }
 

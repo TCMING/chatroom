@@ -1,4 +1,4 @@
-package com.uestc.controllerteam.chartservice;
+package com.uestc.controllerteam.chartservice.config;
 
 import com.uestc.controllerteam.chartservice.utils.JwtAuthenticationInterceptor;
 import org.springframework.context.annotation.Bean;

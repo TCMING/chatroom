@@ -14,6 +14,7 @@
 
 
 //缓存
-1.load全量 user信息，room信息
-2.
+1.load全量 user信息，room信息   room-user关系
+2.conhashmap 中存放集合线程安全吗  
+3.redis 事务  
     
