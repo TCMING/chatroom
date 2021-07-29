@@ -17,9 +17,6 @@ public class RoomRedisDao {
 //    private RedisTemplate<String, RoomDto> redisTemplate;
 	private RedisTemplate redisTemplate;
 
-	@Resource(name="redisTemplate2")
-	private RedisTemplate redisTemplate2;
-
 	private String roomListKey = "roomList";
 
 	private String idKey = "roomIdKey";

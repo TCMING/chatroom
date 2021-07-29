@@ -5,14 +5,12 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import com.uestc.controllerteam.chartservice.dto.RoomDto;
 import com.uestc.controllerteam.chartservice.dto.UserDto;
-import com.uestc.controllerteam.chartservice.repository.CacheRepository;
 import com.uestc.controllerteam.chartservice.repository.RoomRepository;
 import com.uestc.controllerteam.chartservice.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 @Service
@@ -25,8 +23,6 @@ public class RoomService {
 	@Autowired
 	private UserRepository userRepository;
 
-	@Autowired
-	private CacheRepository cacheRepository;
 
 	//暂时不用内存淘汰，维护全量的room-user信息
 	private ConcurrentHashMap<Integer, Set<String>> roomUsersCache = new ConcurrentHashMap<>(2048);

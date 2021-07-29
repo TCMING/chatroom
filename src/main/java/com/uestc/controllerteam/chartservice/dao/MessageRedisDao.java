@@ -13,24 +13,9 @@ import java.util.List;
 
 @Component
 public class MessageRedisDao {
-//    @Resource
-//    private RedisTemplate<String, MessageDto> redisTemplate;
-//
-//    @Resource
-//    private RedisTemplate<String, MessageRetrive> redisTemplateTwo;
-//
-//    @Resource
-//    private RedisTemplate<String, String> redisTemplateThree;
 
     @Resource
     private RedisTemplate redisTemplate;
-
-//    @Resource
-//    private RedisTemplate redisTemplateTwo;
-//
-//    @Resource
-//
-//    private RedisTemplate redisTemplateThree;
 
     private String messageListKey = "messageList";
 
