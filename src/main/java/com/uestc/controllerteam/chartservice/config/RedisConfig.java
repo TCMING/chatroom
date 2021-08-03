@@ -74,7 +74,7 @@ public class RedisConfig {
         genericObjectPoolConfig.setMaxTotal(maxActive);
         genericObjectPoolConfig.setMaxWaitMillis(maxWait);
         genericObjectPoolConfig.setTimeBetweenEvictionRunsMillis(100);
-        RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
+        //RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
         redisStandaloneConfiguration.setDatabase(database);
         redisStandaloneConfiguration.setHostName(host);
         redisStandaloneConfiguration.setPort(port);
@@ -85,7 +85,7 @@ public class RedisConfig {
                 .poolConfig(genericObjectPoolConfig)
                 .build();
 
-        LettuceConnectionFactory factory = new LettuceConnectionFactory(redisStandaloneConfiguration, clientConfig);
+        LettuceConnectionFactory factory = new LettuceConnectionFactory(new RedisSocketConfiguration("/var/run/redis.sock"), clientConfig);
 //        factory.setShareNativeConnection(true);
 //        factory.setValidateConnection(false);
         return factory;
