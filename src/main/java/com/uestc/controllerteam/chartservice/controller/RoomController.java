@@ -1,6 +1,7 @@
 package com.uestc.controllerteam.chartservice.controller;
 
 import com.uestc.controllerteam.chartservice.dto.RoomDto;
+import com.uestc.controllerteam.chartservice.dto.RoomVo;
 import com.uestc.controllerteam.chartservice.dto.UserDto;
 import com.uestc.controllerteam.chartservice.model.Room;
 import com.uestc.controllerteam.chartservice.model.QueryControlData;
@@ -93,8 +94,8 @@ public class RoomController extends AbstractController{
 		if(roomControl.getPageIndex()<0){
 			throw new ChatException("invalid input");
 		}
-		List<RoomDto> roomDtoList = roomRepository.queryRoomRecord(roomControl);
-		return GsonUtils.toJsonString(roomDtoList);
+		List<RoomVo> roomVoList = roomRepository.queryRoomRecord(roomControl);
+		return GsonUtils.toJsonString(roomVoList);
 	}
 
 	// TODO: 2021/7/6 自测用

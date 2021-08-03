@@ -42,7 +42,7 @@ public class MessageController  extends AbstractController {
 		BizCheckUtils.check(queryControlData.getPageIndex() < 0 && queryControlData.getPageSize()>=0,"无效输入");
 
 		UserDto userDto = userRepository.queryUser(username);
-		BizCheckUtils.checkNull(userDto,"Invalid input");
+		BizCheckUtils.check(userDto != null && userDto.getRoomId() > 0,"Invalid input");
 
 		List<MessageRetrive> messageRetrives = messageService.pullMessage(userDto.getRoomId() , queryControlData);
 		return GsonUtils.toJsonString(messageRetrives);

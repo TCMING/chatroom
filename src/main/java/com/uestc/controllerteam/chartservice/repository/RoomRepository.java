@@ -3,6 +3,7 @@ package com.uestc.controllerteam.chartservice.repository;
 import com.uestc.controllerteam.chartservice.dao.RoomDao;
 import com.uestc.controllerteam.chartservice.dao.RoomRedisDao;
 import com.uestc.controllerteam.chartservice.dto.RoomDto;
+import com.uestc.controllerteam.chartservice.dto.RoomVo;
 import com.uestc.controllerteam.chartservice.model.PageDto;
 import com.uestc.controllerteam.chartservice.model.QueryControlData;
 import org.apache.commons.lang3.StringUtils;
@@ -53,11 +54,17 @@ public class RoomRepository implements InitializingBean {
         return String.valueOf(roomId);
     }
 
-    public List<RoomDto> queryRoomRecord(QueryControlData controlData){
+    public List<RoomVo> queryRoomRecord(QueryControlData controlData){
         int startIndex = controlData.getPageIndex()*controlData.getPageSize();
 //        return roomDao.queryRoomRecord(new PageDto(startIndex,controlData.getPageSize()));
-        return roomRedisDao.queryRoomRecord(startIndex,controlData.getPageSize());
-
+        List<RoomVo> roomVos = new ArrayList<>();
+        List<RoomDto> roomDtos = roomRedisDao.queryRoomRecord(startIndex,controlData.getPageSize());
+        if(!CollectionUtils.isEmpty(roomDtos)){
+            for(RoomDto roomDto: roomDtos){
+                roomVos.add(new RoomVo(String.valueOf(roomDto.getId()),roomDto.getName()));
+            }
+        }
+        return roomVos;
     }
 
     public RoomDto queryRoomById(int roomId){
