@@ -2,7 +2,6 @@ package com.uestc.controllerteam.chartservice.repository;
 
 import com.uestc.controllerteam.chartservice.dao.UserDao;
 import com.uestc.controllerteam.chartservice.dao.UserRedisDao;
-import com.uestc.controllerteam.chartservice.dto.RoomDto;
 import com.uestc.controllerteam.chartservice.dto.UserDto;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,17 +43,14 @@ public class UserRepository implements InitializingBean {
 
     public boolean saveUser(UserDto userDto){
 //        boolean success = userDao.saveUser(userDto) <= 1;
-        userRedisDao.createUser(userDto);
-        boolean success = true;
-        if(success){
-            try {
-                usersCache.put(userDto.getUsername(),userDto);
-            } catch (Exception e) {
-                // TODO: 2021/7/26 写内存失败再试一次，再失败就不管了，后面优化
-                usersCache.put(userDto.getUsername(),userDto);
-            }
+        try {
+            userRedisDao.createUser(userDto);
+            usersCache.put(userDto.getUsername(), userDto);
+        } catch (Exception e) {
+            // TODO: 2021/7/26 写内存失败再试一次，再失败就不管了，后面优化
+            usersCache.put(userDto.getUsername(), userDto);
         }
-        return success;
+        return true;
     }
 
     //用户名与房间关系放到缓存，暂时不用
@@ -66,7 +62,6 @@ public class UserRepository implements InitializingBean {
     @Override
     public void afterPropertiesSet() throws Exception {
         usersCache = new ConcurrentHashMap<>(2048);
-//        List<UserDto> roomDtos = userDao.queryAll();
         List<UserDto> roomDtos = userRedisDao.queryAll();
         if(!CollectionUtils.isEmpty(roomDtos)){
             for(UserDto userDto: roomDtos){

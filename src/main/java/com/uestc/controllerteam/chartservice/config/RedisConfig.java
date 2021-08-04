@@ -73,7 +73,7 @@ public class RedisConfig {
         genericObjectPoolConfig.setMinIdle(minIdle);
         genericObjectPoolConfig.setMaxTotal(maxActive);
         genericObjectPoolConfig.setMaxWaitMillis(maxWait);
-        genericObjectPoolConfig.setTimeBetweenEvictionRunsMillis(100);
+        genericObjectPoolConfig.setTimeBetweenEvictionRunsMillis(5000);
         RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
         redisStandaloneConfiguration.setDatabase(database);
         redisStandaloneConfiguration.setHostName(host);
