@@ -94,7 +94,8 @@ public class RoomController extends AbstractController{
 		if(roomControl.getPageIndex()<0){
 			throw new ChatException("invalid input");
 		}
-		List<RoomVo> roomVoList = roomRepository.queryRoomRecord(roomControl);
+//		List<RoomVo> roomVoList = roomRepository.queryRoomRecord(roomControl);
+		List<RoomDto> roomVoList = roomRepository.queryRoomRecord(roomControl);
 		return GsonUtils.toJsonString(roomVoList);
 	}
 

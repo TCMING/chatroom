@@ -54,18 +54,19 @@ public class RoomRepository implements InitializingBean {
         return String.valueOf(roomId);
     }
 
-    public List<RoomVo> queryRoomRecord(QueryControlData controlData){
+    public List<RoomDto> queryRoomRecord(QueryControlData controlData){
         int startIndex = controlData.getPageIndex()*controlData.getPageSize();
-//        return roomDao.queryRoomRecord(new PageDto(startIndex,controlData.getPageSize()));
-        List<RoomVo> roomVos = new ArrayList<>();
+//        List<RoomVo> roomVos = new ArrayList<>();
         List<RoomDto> roomDtos = roomRedisDao.queryRoomRecord(startIndex,controlData.getPageSize());
-        if(!CollectionUtils.isEmpty(roomDtos)){
-            for(RoomDto roomDto: roomDtos){
-                roomVos.add(new RoomVo(String.valueOf(roomDto.getId()),roomDto.getName()));
-            }
-        }
-        return roomVos;
+//        if(!CollectionUtils.isEmpty(roomDtos)){
+//            for(RoomDto roomDto: roomDtos){
+//                roomVos.add(new RoomVo(String.valueOf(roomDto.getId()),roomDto.getName()));
+//            }
+//        }
+//        return roomVos;
+        return roomDtos;
     }
+
 
     public RoomDto queryRoomById(int roomId){
         String roomName = roomsCache.getOrDefault(roomId,null);
