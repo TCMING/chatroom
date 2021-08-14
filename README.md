@@ -24,4 +24,12 @@
 (1)redis作为db，开启aof-always，基准测试写3w/s，实测接口9k/s，远远好于mysql  
 (2)luttuce配套jackson2JsonRedisSerializer序列化，性能和空间表现都比较好，接口性能实测比GenericJackson2JsonRedisSerializer快2-3倍  
 (3)内存中concurrentHashMap 初始化容量寻找最佳值，性能差距在2-3倍  
-(4)tomcat参数调优、controller接口json序列化方式调整、批量落库、redis pipeline等对性能提升不明显（可能瓶颈不在此）
+(4)tomcat参数调优、controller接口json序列化方式调整、批量落库、redis pipeline等对性能提升不明显（可能瓶颈不在此） 
+(5)尝试过对mysql的优化：  
+     （a）分页查询优化，建立覆盖索引，在索引上分页后直接返回  
+     （b）自增主键：减少索引分裂和调整  
+     （c）精简索引，较少索引数量及开销  
+     （d）mysql server参数调优：  
+           innodb_buffer_pool_size  
+           更多参考：https://www.cnblogs.com/wolf-sun/p/10930805.html  
+    
