@@ -17,4 +17,11 @@
 1.load全量 user信息，room信息   room-user关系
 2.conhashmap 中存放集合线程安全吗  
 3.redis 事务  
-    
+
+初赛总结：
+1.架构：tomcat-springboot-luttuce(nio单连接)-redis(aof-always)  
+2.性能优化点：  
+(1)redis作为db，开启aof-always，基准测试写3w/s，实测接口9k/s，远远好于mysql  
+(2)luttuce配套jackson2JsonRedisSerializer序列化，性能和空间表现都比较好，接口性能实测比GenericJackson2JsonRedisSerializer快2-3倍  
+(3)内存中concurrentHashMap 初始化容量寻找最佳值，性能差距在2-3倍  
+(4)tomcat参数调优、controller接口json序列化方式调整、批量落库、redis pipeline等对性能提升不明显（可能瓶颈不在此）

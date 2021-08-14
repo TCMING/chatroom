@@ -37,12 +37,7 @@ public class MessageRepository {
     int med = 5;
     int small = 1;
 
-//    private static ThreadPoolExecutor pool = new ThreadPoolExecutor(4,10,60,
-//            TimeUnit.SECONDS,new LinkedBlockingQueue<>());
-
     private  ArrayDeque queue = new ArrayDeque<MessageDto>();
-
-//    private LinkedBlockingQueue queue = new LinkedBlockingQueue<MessageDto>();
 
     private HashSet<String> addedSet = new HashSet<String>();
 
@@ -54,36 +49,36 @@ public class MessageRepository {
 
     private ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
 
-    private  boolean isInitWorker = initWorker(workNum);
-
-//    public boolean saveMessage(MessageDto messageDto){
-//        messageRedisDao.saveMessage(messageDto);
-//        return true;
-//    }
+//    private  boolean isInitWorker = initWorker(workNum);
 
     public boolean saveMessage(MessageDto messageDto){
-        boolean isRuning = true;
-        try {
-            lock.lock();
-            queue.add(messageDto);
-            if(queue.size()>=big){
-                queueCondition.signalAll();
-            }
-            while (isRuning){
-                saveCondition.await();
-                if(addedSet.contains(messageDto.getId())){
-                    isRuning = false;
-                    addedSet.remove(messageDto.getId());
-                }
-            }
-        } catch (Exception e) {
-            logger.error("---",e);
-            return false;
-        }finally {
-            lock.unlock();
-        }
+        messageRedisDao.saveMessage(messageDto);
         return true;
     }
+
+//    public boolean saveMessage(MessageDto messageDto){
+//        boolean isRuning = true;
+//        try {
+//            lock.lock();
+//            queue.add(messageDto);
+//            if(queue.size()>=big){
+//                queueCondition.signalAll();
+//            }
+//            while (isRuning){
+//                saveCondition.await();
+//                if(addedSet.contains(messageDto.getId())){
+//                    isRuning = false;
+//                    addedSet.remove(messageDto.getId());
+//                }
+//            }
+//        } catch (Exception e) {
+//            logger.error("---",e);
+//            return false;
+//        }finally {
+//            lock.unlock();
+//        }
+//        return true;
+//    }
 
     public boolean queryMessage(String id){
         return messageRedisDao.queryMessage(id);
@@ -99,75 +94,75 @@ public class MessageRepository {
 
     }
 
-    public boolean initWorker(int workNum){
-        //批量线程
-        for(int i=0 ; i<workNum ; i++){
-            Thread thread = new Thread(new MessageTask());
-            thread.start();
-        }
+//    public boolean initWorker(int workNum){
+//        //批量线程
+//        for(int i=0 ; i<workNum ; i++){
+//            Thread thread = new Thread(new MessageTask());
+//            thread.start();
+//        }
+//
+//        service.scheduleAtFixedRate(new Runnable() {
+//                                        @Override
+//                                        public void run() {
+//                                            try {
+//                                                lock.lock();
+//                                                int size = queue.size();
+//                                                if(size>=1){
+//                                                    List<MessageDto> list = new ArrayList<>(size);
+//                                                    Set<String> tempMId = new HashSet<String>(size);
+//                                                    for(int i=0 ; i<size ; i++){
+//                                                        MessageDto messageDto = (MessageDto) queue.remove();
+//                                                        tempMId.add(messageDto.getId());
+//                                                        list.add(messageDto);
+//                                                    }
+//                                                    messageRedisDao.saveMessage(list);
+//                                                    addedSet.addAll(tempMId);
+//                                                    saveCondition.signalAll();
+//                                                }
+//                                            } catch (Exception e) {
+//                                                logger.error("---",e);
+//                                            } finally {
+//                                                lock.unlock();
+//                                            }
+//                                        }
+//                                    },
+//                1000, 100, TimeUnit.MILLISECONDS);
+//
+//        return true;
+//    }
 
-        service.scheduleAtFixedRate(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            try {
-                                                lock.lock();
-                                                int size = queue.size();
-                                                if(size>=1){
-                                                    List<MessageDto> list = new ArrayList<>(size);
-                                                    Set<String> tempMId = new HashSet<String>(size);
-                                                    for(int i=0 ; i<size ; i++){
-                                                        MessageDto messageDto = (MessageDto) queue.remove();
-                                                        tempMId.add(messageDto.getId());
-                                                        list.add(messageDto);
-                                                    }
-                                                    messageRedisDao.saveMessage(list);
-                                                    addedSet.addAll(tempMId);
-                                                    saveCondition.signalAll();
-                                                }
-                                            } catch (Exception e) {
-                                                logger.error("---",e);
-                                            } finally {
-                                                lock.unlock();
-                                            }
-                                        }
-                                    },
-                1000, 100, TimeUnit.MILLISECONDS);
-
-        return true;
-    }
-
-    public class MessageTask implements Runnable{
-
-        @Override
-        public void run() {
-            while (true){
-                try {
-                    lock.lock();
-                    int size = queue.size();
-                    if(queue.size()>=1){
-                        List<MessageDto> list = new ArrayList<>(size);
-                        Set<String> tempMId = new HashSet<String>(size);
-                        for(int i=0 ; i<size ; i++){
-                            MessageDto messageDto = (MessageDto) queue.remove();
-                            tempMId.add(messageDto.getId());
-                            list.add(messageDto);
-                        }
-                        messageRedisDao.saveMessage(list);
-                        addedSet.addAll(tempMId);
-                        saveCondition.signalAll();
-                    }else{
-                        queueCondition.await();
-                    }
-
-                } catch (Exception e) {
-                    logger.error("---",e);
-                }finally {
-                    lock.unlock();
-                }
-            }
-
-        }
-    }
+//    public class MessageTask implements Runnable{
+//
+//        @Override
+//        public void run() {
+//            while (true){
+//                try {
+//                    lock.lock();
+//                    int size = queue.size();
+//                    if(queue.size()>=1){
+//                        List<MessageDto> list = new ArrayList<>(size);
+//                        Set<String> tempMId = new HashSet<String>(size);
+//                        for(int i=0 ; i<size ; i++){
+//                            MessageDto messageDto = (MessageDto) queue.remove();
+//                            tempMId.add(messageDto.getId());
+//                            list.add(messageDto);
+//                        }
+//                        messageRedisDao.saveMessage(list);
+//                        addedSet.addAll(tempMId);
+//                        saveCondition.signalAll();
+//                    }else{
+//                        queueCondition.await();
+//                    }
+//
+//                } catch (Exception e) {
+//                    logger.error("---",e);
+//                }finally {
+//                    lock.unlock();
+//                }
+//            }
+//
+//        }
+//    }
 
 
 }
